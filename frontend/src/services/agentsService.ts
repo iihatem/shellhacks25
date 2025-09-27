@@ -1,11 +1,25 @@
 import { apiClient, ApiResponse } from './api';
+import { firestoreService } from './firestoreService';
 import { Agent, CreateAgentRequest } from './types';
 
 export class AgentsService {
   /**
    * Get all agents in the workspace
    */
-  async getAgents(): Promise<ApiResponse<Agent[]>> {
+  async getAgents(userId?: string): Promise<ApiResponse<Agent[]>> {
+    if (userId) {
+      // Use Firestore for authenticated users
+      try {
+        const agents = await firestoreService.getUserAgents(userId);
+        return { data: agents, status: 200 };
+      } catch (error) {
+        return { 
+          error: error instanceof Error ? error.message : 'Failed to fetch agents',
+          status: 500 
+        };
+      }
+    }
+    // Fallback to API for unauthenticated users
     return apiClient.get<Agent[]>('/agents');
   }
 

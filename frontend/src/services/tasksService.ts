@@ -1,11 +1,25 @@
 import { apiClient, ApiResponse } from './api';
+import { firestoreService } from './firestoreService';
 import { Task, CreateTaskRequest } from './types';
 
 export class TasksService {
   /**
    * Get all tasks
    */
-  async getTasks(): Promise<ApiResponse<Task[]>> {
+  async getTasks(userId?: string): Promise<ApiResponse<Task[]>> {
+    if (userId) {
+      // Use Firestore for authenticated users
+      try {
+        const tasks = await firestoreService.getUserTasks(userId);
+        return { data: tasks, status: 200 };
+      } catch (error) {
+        return { 
+          error: error instanceof Error ? error.message : 'Failed to fetch tasks',
+          status: 500 
+        };
+      }
+    }
+    // Fallback to API for unauthenticated users
     return apiClient.get<Task[]>('/tasks');
   }
 

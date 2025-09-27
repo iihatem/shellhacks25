@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Send, Bot, User } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Send, Bot, User, Loader2 } from "lucide-react";
 import { services, Message } from "@/services";
 
 interface ChatBotProps {
@@ -98,102 +99,130 @@ export default function ChatBot({ onTaskCreated }: ChatBotProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white">
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto space-y-4 pr-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex gap-3 ${
-              message.sender === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            {message.sender === "agent" && (
-              <Avatar className="w-8 h-8 bg-blue-500 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-white" />
-              </Avatar>
-            )}
-
+      <ScrollArea className="flex-1 px-4">
+        <div className="space-y-4 py-4">
+          {messages.map((message) => (
             <div
-              className={`max-w-[80%] rounded-lg p-3 ${
-                message.sender === "user"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-900"
+              key={message.id}
+              className={`flex gap-3 ${
+                message.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {message.sender === "agent" && message.agentName && (
-                <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="secondary" className="text-xs">
-                    {message.agentName}
-                  </Badge>
-                  {message.actionTaken && (
-                    <Badge variant="outline" className="text-xs">
-                      {message.actionTaken}
-                    </Badge>
-                  )}
-                </div>
+              {message.sender === "agent" && (
+                <Avatar className="w-8 h-8 bg-blue-600 flex items-center justify-center shadow-sm">
+                  <Bot className="w-4 h-4 text-white" />
+                </Avatar>
               )}
 
-              <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+              <div
+                className={`max-w-[80%] rounded-xl p-4 shadow-sm ${
+                  message.sender === "user"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-50 text-gray-900 border border-gray-100"
+                }`}
+              >
+                {message.sender === "agent" && message.agentName && (
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge
+                      variant="secondary"
+                      className="text-xs bg-blue-100 text-blue-700"
+                    >
+                      {message.agentName}
+                    </Badge>
+                    {message.actionTaken && (
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-green-50 text-green-700 border-green-200"
+                      >
+                        {message.actionTaken}
+                      </Badge>
+                    )}
+                  </div>
+                )}
 
-              <div className="text-xs opacity-70 mt-1">
-                {message.timestamp.toLocaleTimeString()}
+                <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                  {message.text}
+                </p>
+
+                <div
+                  className={`text-xs mt-2 ${
+                    message.sender === "user"
+                      ? "text-blue-100"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {message.timestamp.toLocaleTimeString()}
+                </div>
               </div>
-            </div>
 
-            {message.sender === "user" && (
-              <Avatar className="w-8 h-8 bg-gray-500 flex items-center justify-center">
-                <User className="w-4 h-4 text-white" />
+              {message.sender === "user" && (
+                <Avatar className="w-8 h-8 bg-gray-600 flex items-center justify-center shadow-sm">
+                  <User className="w-4 h-4 text-white" />
+                </Avatar>
+              )}
+            </div>
+          ))}
+
+          {isLoading && (
+            <div className="flex gap-3 justify-start">
+              <Avatar className="w-8 h-8 bg-blue-600 flex items-center justify-center shadow-sm">
+                <Loader2 className="w-4 h-4 text-white animate-spin" />
               </Avatar>
-            )}
-          </div>
-        ))}
-
-        {isLoading && (
-          <div className="flex gap-3 justify-start">
-            <Avatar className="w-8 h-8 bg-blue-500 flex items-center justify-center">
-              <Bot className="w-4 h-4 text-white" />
-            </Avatar>
-            <div className="bg-gray-100 rounded-lg p-3">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.1s" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
+              <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 shadow-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                    <div
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.1s" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-gray-600">
+                    AI is thinking...
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div ref={messagesEndRef} />
-      </div>
+          <div ref={messagesEndRef} />
+        </div>
+      </ScrollArea>
 
       {/* Input Area */}
-      <div className="border-t pt-4 mt-4">
-        <div className="flex gap-2">
+      <div className="border-t border-gray-100 bg-gray-50/50 p-4">
+        <div className="flex gap-3">
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Describe what you need done..."
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
           />
           <Button
             onClick={sendMessage}
             disabled={!inputValue.trim() || isLoading}
-            size="icon"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4"
           >
-            <Send className="w-4 h-4" />
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Send className="w-4 h-4" />
+            )}
           </Button>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
-          Press Enter to send, Shift+Enter for new line
+        <p className="text-xs text-gray-600 mt-2 flex items-center gap-2">
+          <span>Press Enter to send, Shift+Enter for new line</span>
+          <Badge variant="outline" className="text-xs bg-white">
+            Powered by AI
+          </Badge>
         </p>
       </div>
     </div>
