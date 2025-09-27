@@ -6,15 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Send, Bot, User } from "lucide-react";
-
-interface Message {
-  id: string;
-  text: string;
-  sender: "user" | "agent";
-  agentName?: string;
-  timestamp: Date;
-  actionTaken?: string;
-}
+import { services, Message } from "@/services";
 
 interface ChatBotProps {
   onTaskCreated: () => void;
@@ -57,37 +49,29 @@ export default function ChatBot({ onTaskCreated }: ChatBotProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8001/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: inputValue,
-          user_id: "user-123", // In a real app, this would be the authenticated user's ID
-        }),
-      });
+      const response = await services.chat.sendMessage(inputValue, "user-123");
 
-      if (response.ok) {
-        const data = await response.json();
-
+      if (response.data) {
         const agentMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: data.response,
+          text: response.data.response,
           sender: "agent",
-          agentName: data.agent_name,
+          agentName: response.data.agent_name,
           timestamp: new Date(),
-          actionTaken: data.action_taken,
+          actionTaken: response.data.action_taken,
         };
 
         setMessages((prev) => [...prev, agentMessage]);
 
         // If a task was created, refresh the tasks list
-        if (data.action_taken && data.action_taken.includes("task")) {
+        if (
+          response.data.action_taken &&
+          response.data.action_taken.includes("task")
+        ) {
           onTaskCreated();
         }
-      } else {
-        throw new Error("Failed to send message");
+      } else if (response.error) {
+        throw new Error(response.error);
       }
     } catch (error) {
       console.error("Error sending message:", error);

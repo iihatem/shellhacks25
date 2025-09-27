@@ -3,14 +3,7 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Users, UserCheck } from "lucide-react";
-
-interface Agent {
-  id: string;
-  name: string;
-  role: string;
-  capabilities: string[];
-  is_active: boolean;
-}
+import { Agent } from "@/services";
 
 interface AgentsListProps {
   agents: Agent[];

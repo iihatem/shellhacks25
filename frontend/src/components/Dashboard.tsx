@@ -13,22 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import ChatBot from "@/components/ChatBot";
 import AgentsList from "@/components/AgentsList";
 import TasksList from "@/components/TasksList";
-
-interface Agent {
-  id: string;
-  name: string;
-  role: string;
-  capabilities: string[];
-  is_active: boolean;
-}
-
-interface Task {
-  id: string;
-  description: string;
-  assigned_agent_id?: string;
-  status: string;
-  created_at: string;
-}
+import { services, Agent, Task } from "@/services";
 
 export default function Dashboard() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -42,10 +27,11 @@ export default function Dashboard() {
 
   const fetchAgents = async () => {
     try {
-      const response = await fetch("http://localhost:8001/agents");
-      if (response.ok) {
-        const data = await response.json();
-        setAgents(data);
+      const response = await services.agents.getAgents();
+      if (response.data) {
+        setAgents(response.data);
+      } else if (response.error) {
+        console.error("Error fetching agents:", response.error);
       }
     } catch (error) {
       console.error("Error fetching agents:", error);
@@ -54,10 +40,11 @@ export default function Dashboard() {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch("http://localhost:8001/tasks");
-      if (response.ok) {
-        const data = await response.json();
-        setTasks(data);
+      const response = await services.tasks.getTasks();
+      if (response.data) {
+        setTasks(response.data);
+      } else if (response.error) {
+        console.error("Error fetching tasks:", response.error);
       }
     } catch (error) {
       console.error("Error fetching tasks:", error);

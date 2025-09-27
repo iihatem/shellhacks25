@@ -2,14 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Clock, CheckCircle, AlertCircle, XCircle } from "lucide-react";
-
-interface Task {
-  id: string;
-  description: string;
-  assigned_agent_id?: string;
-  status: string;
-  created_at: string;
-}
+import { Task } from "@/services";
 
 interface TasksListProps {
   tasks: Task[];
