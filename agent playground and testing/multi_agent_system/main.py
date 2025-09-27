@@ -24,8 +24,16 @@ def main():
     result = orchestrator.delegate_task(task, path="multi_agent_system/main.py")
     print(result)
 
-    task = "write a hello world python script"
-    result = orchestrator.delegate_task(task, path="hello_world.py", content="print('Hello, World!')")
+    # --- Task 3: Generate code and save it to a file ---
+    print("--- Task 3: Generating and saving a script ---")
+    code_generation_task = "generate a hello world python script"
+    generated_code = orchestrator.delegate_task(code_generation_task)
+    print(f"Generated code:\n{generated_code}")
+
+    file_writing_task = "write file"
+    result = orchestrator.delegate_task(
+        file_writing_task, path="hello_world_from_agent.py", content=generated_code
+    )
     print(result)
 
 if __name__ == "__main__":

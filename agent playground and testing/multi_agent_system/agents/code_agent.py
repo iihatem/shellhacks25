@@ -7,7 +7,7 @@ class CodeAgent(Agent):
     def __init__(self):
         super().__init__(
             name="CodeAgent",
-            description="Handles writing and executing code. Keywords: code, execute, run, script."
+            description="Generates code based on a prompt. Keywords: code, generate, script."
         )
 
     def run(self, task: str, **kwargs) -> str:
@@ -18,5 +18,9 @@ class CodeAgent(Agent):
         :param kwargs: Additional keyword arguments.
         :return: The result of the task.
         """
-        # For now, just a placeholder.
-        return "CodeAgent is not implemented yet."
+        # In a real implementation, this would use an LLM to generate code.
+        # For now, we'll simulate it by returning a hardcoded script based on the task.
+        if "hello world" in task.lower():
+            return "print('Hello, World from the Code Agent!')"
+        else:
+            return f"# Code for task: {task}\npass"

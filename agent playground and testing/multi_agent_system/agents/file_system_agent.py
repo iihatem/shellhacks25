@@ -8,7 +8,7 @@ class FileSystemAgent(Agent):
     def __init__(self):
         super().__init__(
             name="FileSystemAgent",
-            description="Handles file system operations like list, read, and write files. Keywords: list, read, write, file, directory."
+            description="Handles file system operations. Keywords: list, read, write file, directory."
         )
 
     def run(self, task: str, **kwargs) -> str:
