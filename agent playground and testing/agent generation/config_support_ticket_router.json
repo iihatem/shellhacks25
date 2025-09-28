@@ -1,0 +1,34 @@
+{
+  "name": "Support-Ticket-Router",
+  "description": "Routes support tickets to the correct department based on the subject line.",
+  "trigger": {
+    "type": "email",
+    "source": "support@example.com"
+  },
+  "logic": {
+    "type": "rules",
+    "rules": [
+      {
+        "if": {
+          "field": "subject",
+          "operator": "contains",
+          "value": "Billing"
+        },
+        "then": {
+          "action": "call_sub_agent",
+          "sub_agent": "BillingAgent",
+          "input": "{ticket}"
+        }
+      },
+      {
+        "else": {
+          "action": "call_sub_agent",
+          "sub_agent": "GeneralSupportAgent",
+          "input": "{ticket}"
+        }
+      }
+    ]
+  },
+  "tools": ["read_email", "extract_subject"],
+  "sub_agents": ["BillingAgent", "GeneralSupportAgent"]
+}

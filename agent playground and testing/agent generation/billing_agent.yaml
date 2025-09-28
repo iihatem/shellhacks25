@@ -1,0 +1,18 @@
+# billing_agent.yaml
+
+metadata:
+  created_by: Support-Ticket-Router # Notation indicating which agent necessitated this sub-agent
+
+name: Billing-Agent
+model: gemini-1.5-pro-latest
+description: Handles billing-related support tickets.
+
+instruction: |
+  You are a specialized agent for handling billing issues. When you receive a ticket, analyze its content for specific problems like invoice discrepancies, payment failures, or subscription questions. Use the available tools to investigate and resolve the issue. If the issue is complex or requires manual intervention, escalate it to the human billing department.
+
+tools:
+  - name: lookup_invoice
+  - name: process_refund
+  - name: check_subscription_status
+
+sub_agents: [] # This agent does not have sub-agents, but could escalate to a human.

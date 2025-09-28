@@ -1,0 +1,16 @@
+In the context of providing a request to generate an agent, here are the definitions:
+
+*   **Concise:** The request should be brief and to the point, avoiding unnecessary words or long explanations.
+*   **Clear:** The request should be easy to understand, with no ambiguity about the agent's purpose.
+*   **Direct:** The request should state the agent's primary function upfront.
+*   **Precise:** The request should include specific details about the agent's tasks, inputs, and outputs.
+
+Here is an example to illustrate the difference:
+
+**Vague and Unclear Request:**
+
+> "Make an agent that deals with customer support."
+
+**Concise, Clear, Direct, and Precise Request:**
+
+> "Create a 'Support-Ticket-Router' agent. When a new support ticket is received via email, the agent should read the ticket's subject line. If the subject line contains the word 'Billing', assign the ticket to the 'Billing' department. Otherwise, assign it to 'General Support'."

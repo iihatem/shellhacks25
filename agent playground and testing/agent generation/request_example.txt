@@ -1,0 +1,1 @@
+Create an agent to get the current weather for a city. It should take a city name as input and return the temperature in Celsius.

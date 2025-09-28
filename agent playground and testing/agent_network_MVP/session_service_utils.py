@@ -4,7 +4,7 @@ import os
 import asyncio
 from google.adk.agents import Agent
 from google.adk.models.lite_llm import LiteLlm # For multi-model support
-from google.adk.sessions import InMemorySessionService
+from google.adk.sessions import InMemorySessionService, Session
 from google.adk.runners import Runner
 from google.genai import types # For creating message Content/Parts
 
@@ -26,17 +26,19 @@ from typing import Optional, Dict, Any # For type hints
 #session_service = InMemorySessionService()
 
 # Define constants for identifying the interaction context
-APP_NAME = "weather_tutorial_app"
-USER_ID = "user_1"
-SESSION_ID = "session_001" # Using a fixed ID for simplicity
+# APP_NAME = "weather_tutorial_app"
+# USER_ID = "user_1"
+# SESSION_ID = "session_001" # Using a fixed ID for simplicity
 
-async def get_session_basic(APP_NAME, USER_ID, SESSION_ID, session_service):
-    retrieved_session = await session_service.get_session(app_name=APP_NAME,
+# async def get_session_basic(APP_NAME, USER_ID, SESSION_ID, session_service):
+async def get_session_basic(APP_NAME: str, USER_ID: str, SESSION_ID: str, SESSION_SERVICE: InMemorySessionService) -> Optional[Session]:
+    retrieved_session = await SESSION_SERVICE.get_session(app_name=APP_NAME,
                                                                 user_id=USER_ID,
                                                                 session_id = SESSION_ID)
     return retrieved_session
 
-async def create_basic_session(APP_NAME, USER_ID, SESSION_ID):
+# async def create_basic_session(APP_NAME, USER_ID, SESSION_ID):
+async def create_basic_session(APP_NAME: str, USER_ID: str, SESSION_ID: str) -> tuple[Session, InMemorySessionService]:
     # Create the specific session where the conversation will happen
     session_service = InMemorySessionService()
     session = await session_service.create_session(
@@ -45,9 +47,11 @@ async def create_basic_session(APP_NAME, USER_ID, SESSION_ID):
         session_id=SESSION_ID
     )
     print(f"Session created: App='{APP_NAME}', User='{USER_ID}', Session='{SESSION_ID}'")
-    return session
+    return [session, session_service]
 
-async def create_stateful_session(APP_NAME, USER_ID, SESSION_ID, initial_state):
+
+# async def create_stateful_session(APP_NAME, USER_ID, SESSION_ID, initial_state):
+async def create_stateful_session(APP_NAME: str, USER_ID: str, SESSION_ID: str, initial_state: Dict[str, Any]) -> tuple[Session, InMemorySessionService]:
     session_service = InMemorySessionService()
     session = await session_service.create_session(
         app_name=APP_NAME, # Use the consistent app name
@@ -56,4 +60,4 @@ async def create_stateful_session(APP_NAME, USER_ID, SESSION_ID, initial_state):
         state=initial_state # <<< Initialize state during creation
     )
     print(f"✅ Session '{SESSION_ID}' created for user '{USER_ID}'.")
-    return session
+    return [session, session_service]

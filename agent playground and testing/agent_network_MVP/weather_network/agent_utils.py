@@ -20,7 +20,8 @@ from google.adk.tools.base_tool import BaseTool
 from google.genai import types # For creating message Content/Parts
 
 
-def create_project_manager(project_manager_agent: Agent, APP_NAME, session_service) -> Runner:
+# def create_project_manager(project_manager_agent: Agent, APP_NAME, session_service) -> Runner:
+def create_project_manager(project_manager_agent: Agent, APP_NAME: str, session_service: InMemorySessionService) -> Runner:
    # Key Concept: Runner orchestrates the agent execution loop.
    #print("broke here")
    runner = Runner(
@@ -29,17 +30,21 @@ def create_project_manager(project_manager_agent: Agent, APP_NAME, session_servi
       session_service=session_service # Uses our session manager
    )
    print(f"Runner created for agent '{runner.agent.name}'.")
+   return runner
 
-async def run_agent(query: str, runner: Runner, user_id, session_id):
+# async def run_agent(query: str, runner: Runner, user_id, session_id):
+async def run_agent(query: str, runner: Runner, user_id: str, session_id: str) -> None:
+
    await call_agent_async(query, runner, user_id, session_id)
 
-async def call_agent_async(query: str, runner: Runner, user_id, session_id):
+# async def call_agent_async(query: str, runner: Runner, user_id, session_id):
+async def call_agent_async(query: str, runner: Runner, user_id: str, session_id: str) -> None:
    """Sends a query to the agent and prints the final response."""
    print(f"\n>>> User Query: {query}")
-   print("broke here")
+   #print("broke here")
    # Prepare the user's message in ADK format
    content = types.Content(role='user', parts=[types.Part(text=query)])
-   print("broke here2")
+   #print("broke here2")
    final_response_text = "Agent did not produce a final response." # Default
 
    # Key Concept: run_async executes the agent logic and yields Events.

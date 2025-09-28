@@ -1,0 +1,15 @@
+{
+  "agent_name": "weather_retriever",
+  "description": "An agent to get the current weather for a city.",
+  "tools": [
+    {
+      "name": "get_weather",
+      "description": "A tool to get the current weather for a city.",
+      "parameters": [
+        {"name": "city", "type": "string", "description": "The city to get the weather for."}
+      ],
+      "returns": {"name": "temperature", "type": "float", "description": "The temperature in Celsius."}
+    }
+  ],
+  "sub_agents": []
+}

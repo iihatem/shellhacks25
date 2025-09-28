@@ -23,7 +23,8 @@ from weather_tools import get_weather, say_goodbye, say_hello, get_weather_state
 MODEL_GEMINI_2_0_FLASH = "gemini-2.5-pro"
 AGENT_MODEL = MODEL_GEMINI_2_0_FLASH
 
-def get_weather_agent():
+# def get_weather_agent():
+def get_weather_agent() -> Agent:
     # @title Define the Weather Agent
     weather_agent = Agent(
         name="weather_agent_v1",
@@ -35,12 +36,14 @@ def get_weather_agent():
                     "If the tool returns an error, inform the user politely. "
                     "If the tool is successful, present the weather report clearly.",
         tools=[get_weather], # Pass the function directly
+        sub_agents=[get_greeting_agent(), get_farewell_agent()]
     )
 
 
     return weather_agent
 
-def get_greeting_agent():
+# def get_greeting_agent():
+def get_greeting_agent() -> Agent:
     greeting_agent = Agent(
         # Using a potentially different/cheaper model for a simple task
         model = AGENT_MODEL,
@@ -61,7 +64,8 @@ def get_greeting_agent():
     # description="Handles simple greetings and hellos using the 'say_hello' tool.",
 
 
-def get_farewell_agent():
+# def get_farewell_agent():
+def get_farewell_agent() -> Agent:
     farewell_agent = Agent(
         # Can use the same or a different model
         model = AGENT_MODEL,
@@ -84,7 +88,8 @@ def get_farewell_agent():
 
 
 
-def get_weather_agent_2():
+# def get_weather_agent_2():
+def get_weather_agent_2() -> Agent:
     weather_agent_team = Agent(
         name="weather_agent_v2", # Give it a new version name
         model=AGENT_MODEL,
@@ -99,13 +104,15 @@ def get_weather_agent_2():
                     "For anything else, respond appropriately or state you cannot handle it.",
         tools=[get_weather], # Root agent still needs the weather tool for its core task
         # Key change: Link the sub-agents here!
-        sub_agents=[get_greeting_agent, get_farewell_agent]
+        sub_agents=[get_greeting_agent(), get_farewell_agent()],
     )
     print(f"✅ Root Agent '{weather_agent_team.name}' created using model '{AGENT_MODEL}' with sub-agents: {[sa.name for sa in weather_agent_team.sub_agents]}")
+    return weather_agent_team
 
 
 
-def get_weather_agent_5():
+# def get_weather_agent_5():
+def get_weather_agent_5() -> Agent:
     root_agent_model_guardrail = Agent(
         name="weather_agent_v5_model_guardrail", # New version name for clarity
         model=AGENT_MODEL,
@@ -114,14 +121,15 @@ def get_weather_agent_5():
                     "Delegate simple greetings to 'greeting_agent' and farewells to 'farewell_agent'. "
                     "Handle only weather requests, greetings, and farewells.",
         tools=[get_weather_stateful],
-        sub_agents=[get_greeting_agent, get_farewell_agent], # Reference the redefined sub-agents
+        sub_agents=[get_greeting_agent(), get_farewell_agent()], # Reference the redefined sub-agents
         output_key="last_weather_report", # Keep output_key from Step 4
         before_model_callback=block_keyword_guardrail # <<< Assign the guardrail callback
     )
     print(f"✅ Root Agent '{root_agent_model_guardrail.name}' created with before_model_callback.")
+    return root_agent_model_guardrail
 
-
-def get_weather_agent_6():
+# def get_weather_agent_6():
+def get_weather_agent_6() -> Agent:
     root_agent_tool_guardrail = Agent(
         name="weather_agent_v6_tool_guardrail", # New version name
         model=AGENT_MODEL,
@@ -130,9 +138,10 @@ def get_weather_agent_6():
                     "Delegate greetings to 'greeting_agent' and farewells to 'farewell_agent'. "
                     "Handle only weather, greetings, and farewells.",
         tools=[get_weather_stateful],
-        sub_agents=[get_greeting_agent, get_farewell_agent],
+        sub_agents=[get_greeting_agent(), get_farewell_agent()],
         output_key="last_weather_report",
         before_model_callback=block_keyword_guardrail, # Keep model guardrail
         before_tool_callback=block_paris_tool_guardrail # <<< Add tool guardrail
     )
     print(f"✅ Root Agent '{root_agent_tool_guardrail.name}' created with BOTH callbacks.")
+    return root_agent_tool_guardrail

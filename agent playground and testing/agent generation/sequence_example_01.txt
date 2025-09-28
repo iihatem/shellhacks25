@@ -1,0 +1,17 @@
+I need a 'New-User-Onboarding' agent that orchestrates the onboarding process for new customers. The process should run in a sequence.
+
+1.  **Trigger:** A new user signs up on our platform.
+
+2.  **Agent 1 (Sub-agent): `Welcome-Email-Sender`**
+    *   **Action:** When triggered, this agent will send a personalized welcome email to the new user.
+    *   **Tool:** It needs a tool to send emails via our company's email service.
+
+3.  **Agent 2 (Sub-agent): `Account-Verifier`**
+    *   **Action:** After the welcome email is sent, this agent will check our user database to confirm that the new user's account has been fully provisioned.
+    *   **Tool:** It needs a tool to query our user database.
+
+4.  **Agent 3 (Sub-agent): `Onboarding-Task-Creator`**
+    *   **Action:** Once the account is verified, this agent will create a set of initial 'getting started' tasks for the user in our project management system.
+    *   **Tool:** It needs a tool to interact with our project management system's API.
+
+The main 'New-User-Onboarding' agent should manage the flow between these three sub-agents, ensuring they execute in the correct order and handling any errors that may occur.

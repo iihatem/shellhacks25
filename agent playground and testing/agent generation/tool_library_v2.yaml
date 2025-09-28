@@ -1,0 +1,46 @@
+# tool_library_v2.yaml
+
+tools:
+  - tool_id: T001
+    name: read_email_subject
+    description: Reads the subject line of a new support ticket from an email source.
+    category: email
+    version: 1.0
+    author: core_development
+    schema: # OpenAPI schema for the tool's parameters and output
+      input:
+        type: object
+        properties:
+          email_id:
+            type: string
+            description: The unique ID of the email to read.
+        required:
+          - email_id
+      output:
+        type: object
+        properties:
+          subject:
+            type: string
+            description: The subject line of the email.
+
+  - tool_id: T002
+    name: lookup_invoice
+    description: Looks up an invoice by its ID.
+    category: billing
+    version: 1.0
+    author: billing_team
+    schema:
+      input:
+        type: object
+        properties:
+          invoice_id:
+            type: string
+            description: The ID of the invoice to look up.
+        required:
+          - invoice_id
+      output:
+        type: object
+        properties:
+          invoice_details:
+            type: object
+            description: The details of the invoice.

@@ -26,32 +26,61 @@ import weather_tools
 from session_service_utils import create_basic_session, create_stateful_session, get_session_basic
 
 
-async def call_agent_async(query: str, runner, user_id, session_id):
-  """Sends a query to the agent and prints the final response."""
-  print(f"\n>>> User Query: {query}")
+# async def call_agent_async(query: str, runner, user_id, session_id):
+#   """Sends a query to the agent and prints the final response."""
+#   print(f"\n>>> User Query: {query}")
 
-  # Prepare the user's message in ADK format
-  content = types.Content(role='user', parts=[types.Part(text=query)])
+#   # Prepare the user's message in ADK format
+#   content = types.Content(role='user', parts=[types.Part(text=query)])
 
-  final_response_text = "Agent did not produce a final response." # Default
+#   final_response_text = "Agent did not produce a final response." # Default
+#   print("did we get here?")
+#   # Key Concept: run_async executes the agent logic and yields Events.
+#   # We iterate through events to find the final answer.
+#   async for event in runner.run_async(user_id=user_id, session_id=session_id, new_message=content):
+#       # You can uncomment the line below to see *all* events during execution
+#       # print(f"  [Event] Author: {event.author}, Type: {type(event).__name__}, Final: {event.is_final_response()}, Content: {event.content}")
 
-  # Key Concept: run_async executes the agent logic and yields Events.
-  # We iterate through events to find the final answer.
-  async for event in runner.run_async(user_id=user_id, session_id=session_id, new_message=content):
-      # You can uncomment the line below to see *all* events during execution
-      # print(f"  [Event] Author: {event.author}, Type: {type(event).__name__}, Final: {event.is_final_response()}, Content: {event.content}")
+#       # Key Concept: is_final_response() marks the concluding message for the turn.
+#       if event.is_final_response():
+#           if event.content and event.content.parts:
+#              # Assuming text response in the first part
+#              final_response_text = event.content.parts[0].text
+#           elif event.actions and event.actions.escalate: # Handle potential errors/escalations
+#              final_response_text = f"Agent escalated: {event.error_message or 'No specific message.'}"
+#           # Add more checks here if needed (e.g., specific error codes)
+#           break # Stop processing events once the final response is found
 
-      # Key Concept: is_final_response() marks the concluding message for the turn.
-      if event.is_final_response():
-          if event.content and event.content.parts:
-             # Assuming text response in the first part
-             final_response_text = event.content.parts[0].text
-          elif event.actions and event.actions.escalate: # Handle potential errors/escalations
-             final_response_text = f"Agent escalated: {event.error_message or 'No specific message.'}"
-          # Add more checks here if needed (e.g., specific error codes)
-          break # Stop processing events once the final response is found
+#   print(f"<<< Agent Response: {final_response_text}")
 
-  print(f"<<< Agent Response: {final_response_text}")
+
+# # @title Define the get_weather Tool
+# def get_weather(city: str) -> dict:
+#     """Retrieves the current weather report for a specified city.
+
+#     Args:
+#         city (str): The name of the city (e.g., "New York", "London", "Tokyo").
+
+#     Returns:
+#         dict: A dictionary containing the weather information.
+#               Includes a 'status' key ('success' or 'error').
+#               If 'success', includes a 'report' key with weather details.
+#               If 'error', includes an 'error_message' key.
+#     """
+#     print(f"--- Tool: get_weather called for city: {city} ---") # Log tool execution
+#     city_normalized = city.lower().replace(" ", "") # Basic normalization
+
+#     # Mock weather data
+#     mock_weather_db = {
+#         "newyork": {"status": "success", "report": "The weather in New York is sunny with a temperature of 25°C."},
+#         "london": {"status": "success", "report": "It's cloudy in London with a temperature of 15°C."},
+#         "tokyo": {"status": "success", "report": "Tokyo is experiencing light rain and a temperature of 18°C."},
+#     }
+
+#     if city_normalized in mock_weather_db:
+#         return mock_weather_db[city_normalized]
+#     else:
+#         return {"status": "error", "error_message": f"Sorry, I don't have weather information for '{city}'."}
 
 
 import warnings
@@ -79,7 +108,8 @@ MODEL_GEMINI_2_0_FLASH = "gemini-2.5-pro"
 
 AGENT_MODEL = MODEL_GEMINI_2_0_FLASH # Starting with Gemini
 
-async def run_conversation():
+# async def run_conversation():
+async def run_conversation() -> None:
     # --- Session Management ---
     # Key Concept: SessionService stores conversation history & state.
     # InMemorySessionService is simple, non-persistent storage for this tutorial.
@@ -94,14 +124,18 @@ async def run_conversation():
     # Key Concept: SessionService stores conversation history & state.
     # InMemorySessionService is simple, non-persistent storage for this tutorial.
     # Create the specific session where the conversation will happen
-    current_session = await create_basic_session(APP_NAME, USER_ID, SESSION_ID)
+    [current_session, current_session_service] = await create_basic_session(APP_NAME, USER_ID, SESSION_ID)
+    # current_session_service = InMemorySessionService()
+    # current_session = await current_session_service.create_session(
+    #         app_name=APP_NAME, # Use the consistent app name
+    #         user_id=USER_ID,
+    #         session_id=SESSION_ID
+            
+    #     )
+    # print(f"✅ Session '{SESSION_ID}' created for user '{USER_ID}'.")
+
     print(f"Session created: App='{APP_NAME}', User='{USER_ID}', Session='{SESSION_ID}'")
 
-    # await session_service.create_session(
-    #     app_name=APP_NAME,
-    #     user_id=USER_ID,
-    #     session_id=SESSION_ID
-    # )
     # --- Agent ----
     # Key Concept:
     # agent that is created to do the task/recieve query
@@ -110,35 +144,28 @@ async def run_conversation():
     # --- Runner ---
     # Key Concept: Runner orchestrates the agent execution loop.
     # this is used for running agents properly
-    runner = create_project_manager(weather_agent, APP_NAME, current_session)
-    
+    runner = create_project_manager(weather_agent, APP_NAME, current_session_service)
+    print(f"Runner created for agent '{runner.agent.name}'.")
 
     query = "What is the weather in New York?"
-    print("we got here")
-    await call_agent_async(query, runner, USER_ID, SESSION_ID)
-    print("we got here")
-
-    # await call_agent_async("What is the weather like in London?",
-    #                                    runner=runner,
-    #                                    user_id=USER_ID,
-    #                                    session_id=SESSION_ID)
+    #print("we got here")
+    #await run_agent(query, runner, USER_ID, SESSION_ID)
+    #print("we got here!")
 
 
     # using a team based system with subagents
+    # new session:
+    # APP_NAME = "weather_tutorial_agent_team"
+    # USER_ID = "user_1_agent_team"
+    # SESSION_ID = "session_001_agent_team"
+    # [current_session, current_session_service] = [None, None]
+    [current_session, current_session_service] = await create_basic_session(APP_NAME, USER_ID, SESSION_ID)
+    print(f"Session created: App='{APP_NAME}', User='{USER_ID}', Session='{SESSION_ID}'")
 
     # creates agent with subagents
     weather_agent_team = agents.get_weather_agent_2()
-
-
-    APP_NAME = "weather_tutorial_agent_team"
-    USER_ID = "user_1_agent_team"
-    SESSION_ID = "session_001_agent_team"
-
-    current_session = await create_basic_session(APP_NAME, USER_ID, SESSION_ID)
-    print(f"Session created: App='{APP_NAME}', User='{USER_ID}', Session='{SESSION_ID}'")
-
-
-    runner_agent_team = create_project_manager(weather_agent_team, APP_NAME, current_session)
+    #print("FUCK ME!")
+    runner_agent_team = create_project_manager(weather_agent_team, APP_NAME, current_session_service)
     print(f"Runner created for agent '{weather_agent_team.name}'.")
 
     # we can look into something called InMemoryRunner
@@ -151,6 +178,8 @@ async def run_conversation():
     query = "Thanks, bye!"
     await run_agent(query, runner_agent_team, USER_ID, SESSION_ID)
 
+
+    
 
 
     # now we are going to do  a few things that make it obvious we are doing something that takes in a state system
@@ -165,11 +194,11 @@ async def run_conversation():
     }
 
     # Create the session, providing the initial state
-    session_stateful = await create_stateful_session(APP_NAME, USER_ID_STATEFUL, SESSION_ID_STATEFUL, initial_state)
+    [session_stateful, session_stateful_service]= await create_stateful_session(APP_NAME, USER_ID_STATEFUL, SESSION_ID_STATEFUL, initial_state)
 
     # now check to see what the state is:
     # Verify the initial state was set correctly
-    retrieved_session = await get_session_basic(APP_NAME, USER_ID_STATEFUL, SESSION_ID_STATEFUL, session_stateful)
+    retrieved_session = await get_session_basic(APP_NAME, USER_ID_STATEFUL, SESSION_ID_STATEFUL, session_stateful_service)
     print("\n--- Initial Session State ---")
     if retrieved_session:
         print(retrieved_session.state)
@@ -178,11 +207,11 @@ async def run_conversation():
 
     weather_agent_team_guardrail = agents.get_weather_agent_5()
 
-    runner_root_model_guardrail = create_project_manager(weather_agent_team_guardrail, APP_NAME, session_stateful)
+    runner_root_model_guardrail = create_project_manager(weather_agent_team_guardrail, APP_NAME, session_stateful_service)
 
     # now this how you do bulk, repeated queries with differnt systems
 
-    interaction_func = lambda query: call_agent_async(query,
+    interaction_func = lambda query: run_agent(query,
                                                             runner_root_model_guardrail,
                                                             USER_ID_STATEFUL, # Use existing user ID
                                                             SESSION_ID_STATEFUL # Use existing session ID
@@ -200,14 +229,17 @@ async def run_conversation():
     await interaction_func("Hello again")
 
 
-    final_session = get_session_basic(APP_NAME, USER_ID_STATEFUL, SESSION_ID_STATEFUL, session_stateful)
+    final_session = await get_session_basic(APP_NAME, USER_ID_STATEFUL, SESSION_ID_STATEFUL, session_stateful_service)
+    
 
 
     # now lets try and do the agent with subagents, statefulness, model_callback and tool_callback
     # This should be the base model structure we need to confirm having
     default_weather_agent = agents.get_weather_agent_6()
-    interaction_func = lambda query: call_agent_async(query,
-                                                            default_weather_agent,
+
+    final_runner = create_project_manager(default_weather_agent, APP_NAME, session_stateful_service)
+    interaction_func = lambda query: run_agent(query,
+                                                            final_runner,
                                                             USER_ID_STATEFUL, # Use existing user ID
                                                             SESSION_ID_STATEFUL # Use existing session ID
                                                             )
@@ -226,9 +258,8 @@ async def run_conversation():
 
     print("\n--- Inspecting Final Session State (After Tool Guardrail Test) ---")
     # Use the session service instance associated with this stateful session
-    final_session = await session_stateful.get_session(app_name=APP_NAME,
-                                                        user_id=USER_ID_STATEFUL,
-                                                        session_id= SESSION_ID_STATEFUL)
+                                            #APP_NAME: str, USER_ID: str, SESSION_ID: str, SESSION_SERVICE
+    final_session = await get_session_basic(APP_NAME,USER_ID_STATEFUL,SESSION_ID_STATEFUL, session_stateful_service)
     if final_session:
         # Use .get() for safer access
         print(f"Tool Guardrail Triggered Flag: {final_session.state.get('guardrail_tool_block_triggered', 'Not Set (or False)')}")
@@ -239,7 +270,8 @@ async def run_conversation():
 # Uncomment the following lines if running as a standard Python script (.py file):
 import asyncio
 if __name__ == "__main__":
-    try:
-        asyncio.run(run_conversation())
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    asyncio.run(run_conversation())
+    # try:
+    #     asyncio.run(run_conversation())
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")

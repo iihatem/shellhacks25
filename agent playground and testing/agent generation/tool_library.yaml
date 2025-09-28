@@ -1,0 +1,28 @@
+# tool_library.yaml
+
+tools:
+  - name: read_email_subject
+    description: Reads the subject line of a new support ticket.
+    schema: # OpenAPI schema for the tool's parameters
+      type: object
+      properties:
+        ticket_id:
+          type: string
+          description: The ID of the support ticket.
+      required:
+        - ticket_id
+
+  - name: assign_ticket
+    description: Assigns a ticket to a department or agent.
+    schema:
+      type: object
+      properties:
+        ticket_id:
+          type: string
+          description: The ID of the support ticket.
+        assignee:
+          type: string
+          description: The name of the department or agent to assign the ticket to.
+      required:
+        - ticket_id
+        - assignee

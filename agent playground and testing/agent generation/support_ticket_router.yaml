@@ -1,0 +1,23 @@
+# support_ticket_router.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
+
+name: Support-Ticket-Router
+model: gemini-1.5-pro-latest
+description: Routes support tickets to the correct department based on the subject line.
+
+instruction: |
+  When a new support ticket is received, you must perform the following steps:
+  1. Use the `read_email_subject` tool to get the subject line of the ticket.
+  2. Analyze the subject line. 
+  3. If the subject line contains the word 'Billing', delegate the ticket to the 'Billing-Agent' sub-agent.
+  4. Otherwise, delegate the ticket to the 'General-Support-Agent' sub-agent.
+
+tools:
+  - name: read_email_subject
+    description: Reads the subject line of a new support ticket.
+
+sub_agents:
+  - name: Billing-Agent
+    description: Handles billing-related support tickets.
+  - name: General-Support-Agent
+    description: Handles general support tickets.
