@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import { services, Message } from "@/services";
 
@@ -101,7 +100,7 @@ export default function ChatBot({ onTaskCreated }: ChatBotProps) {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Messages Container */}
-      <ScrollArea className="flex-1 px-4">
+      <div className="flex-1 px-4 overflow-y-auto">
         <div className="space-y-4 py-4">
           {messages.map((message) => (
             <div
@@ -193,7 +192,7 @@ export default function ChatBot({ onTaskCreated }: ChatBotProps) {
 
           <div ref={messagesEndRef} />
         </div>
-      </ScrollArea>
+      </div>
 
       {/* Input Area */}
       <div className="border-t border-gray-100 bg-gray-50/50 p-4">
