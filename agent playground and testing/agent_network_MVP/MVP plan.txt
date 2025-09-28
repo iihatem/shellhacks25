@@ -1,0 +1,264 @@
+This structure is designed to be directly translatable into code by another agent.
+
+-----
+
+### \#\# Key Modifications
+
+1.  **Google AI Studio Integration:** The system will use the `google-generativeai` library. The API key should be stored in a `config.py` file for easy management.
+2.  **Interactive `main.py`:** When you run `main.py`, it will now present a simple input prompt. After you enter your query and the system processes it, it will only output a confirmation message, with the detailed solution logged to the review queue as planned.
+3.  **Verbose Console Logging 📝:** Clear, formatted print statements are added to each component's execution flow. This allows you to watch the "chain of thought" and action of the agent system directly in your terminal, showing which agent or tool is active at any moment.
+
+-----
+
+### \#\# Updated Blueprint for Code Generation
+
+The file structure remains the same. The primary changes are within the Python files themselves.
+
+**File Structure:**
+
+```
+/agent_firm_mvp
+├── main.py
+├── config.py
+├── task_manager.py
+│
+└── /components
+    ├── task_router.py
+    ├── agent_provisioner.py
+    ├── orchestrator.py
+    └── specialist_agents.py
+```
+
+#### **`config.py`**
+
+This file will store your secret key.
+
+```python
+# config.py
+# Get your API key from Google AI Studio: https://aistudio.google.com/app/apikey
+GOOGLE_API_KEY = "YOUR_AISTUDIO_API_KEY_HERE"
+```
+
+#### **`task_manager.py`**
+
+No major changes here, but the review queue function is essential.
+
+```python
+# task_manager.py
+import uuid
+import json
+from datetime import datetime
+
+class Task:
+    """A class to represent a single task in the system."""
+    def __init__(self, prompt: str):
+        self.id = str(uuid.uuid4())
+        self.prompt = prompt
+        self.status = "new"
+        self.log = []
+        print(f"[TaskManager] >> New task created with ID: {self.id}")
+
+def add_to_review_queue(task_id: str, prompt: str, solution: str):
+    """Logs the final proposed solution to a review file."""
+    review_entry = {
+        "task_id": task_id,
+        "timestamp": datetime.now().isoformat(),
+        "original_prompt": prompt,
+        "proposed_solution": solution
+    }
+    with open("review_queue.jsonl", "a") as f:
+        f.write(json.dumps(review_entry) + "\n")
+    print(f"[TaskManager] >> Solution for task {task_id} added to review queue.")
+```
+
+#### **`components/specialist_agents.py`**
+
+Added logging to the `SearchAgent`.
+
+```python
+# components/specialist_agents.py
+
+class SearchAgent:
+    """A specialist agent that performs web searches."""
+    def execute(self, query: str) -> str:
+        """
+        Executes a search query.
+        For the MVP, this can return a dummy result.
+        In a real implementation, this would use a library like `requests` or a dedicated search API.
+        """
+        print(f"\n[SearchAgent] >> 👩‍💻 Executing search for: '{query}'")
+        # --- API Call to a search engine would go here ---
+        dummy_result = f"Search results for '{query}': The answer is likely related to this topic."
+        print("[SearchAgent] >> ✅ Search complete. Returning results.")
+        return dummy_result
+```
+
+#### **`components/agent_provisioner.py`**
+
+This component now uses `genai` for the LLM call and has clear logging.
+
+```python
+# components/agent_provisioner.py
+import google.generativeai as genai
+from config import GOOGLE_API_KEY
+from task_manager import Task
+from .orchestrator import OrchestratorAgent
+from .specialist_agents import SearchAgent
+
+genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel('gemini-pro')
+
+class AgentProvisioner:
+    """Creates a new team of agents to handle a specific task."""
+    def create_team(self, task: Task) -> OrchestratorAgent:
+        print("\n[AgentProvisioner] >> 📝 Received task. Provisioning new team.")
+        print("[AgentProvisioner] >> Calling LLM to generate mission for Orchestrator...")
+
+        prompt = f"""
+        Based on the task: '{task.prompt}', write a clear and concise mission statement
+        for a new Orchestrator Agent. The agent's goal is to answer the user's prompt
+        using only a 'SearchAgent' tool. The mission should be a direct instruction.
+        """
+        response = model.generate_content(prompt)
+        mission = response.text.strip()
+        
+        print(f"[AgentProvisioner] >> Mission created: '{mission}'")
+        print("[AgentProvisioner] >> Instantiating Orchestrator Agent with a SearchAgent.")
+
+        # For the MVP, we hard-code the specialist needed
+        specialists = {"search": SearchAgent()}
+        return OrchestratorAgent(mission, specialists)
+```
+
+#### **`components/orchestrator.py`**
+
+The core of the logging happens here, showing the agent's thought process.
+
+```python
+# components/orchestrator.py
+import google.generativeai as genai
+from config import GOOGLE_API_KEY
+
+genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel('gemini-pro')
+
+class OrchestratorAgent:
+    """The team manager that directs specialist agents to solve a task."""
+    def __init__(self, mission: str, specialists: dict):
+        self.mission = mission
+        self.specialists = specialists
+        print("[OrchestratorAgent] >> 🧑‍🏫 New Orchestrator Agent created.")
+
+    def run_mission(self, initial_prompt: str) -> str:
+        print(f"\n[OrchestratorAgent] >> Mission started: {self.mission}")
+        
+        # This is a simplified ReAct loop for the MVP
+        # A more complex agent would loop multiple times
+        
+        # 1. THINK
+        thought_prompt = f"""
+        My mission is: '{self.mission}'.
+        The original user request is: '{initial_prompt}'.
+        Based on this, what is the single, simple search query I should use with my SearchAgent to get the answer?
+        Respond with ONLY the search query and nothing else.
+        """
+        print("[OrchestratorAgent] >> 🤔 THINKING: What search query should I use?")
+        response = model.generate_content(thought_prompt)
+        search_query = response.text.strip()
+        print(f"[OrchestratorAgent] >> Thought complete. Decided on query: '{search_query}'")
+
+        # 2. ACT
+        print(f"[OrchestratorAgent] >> 🎬 ACTION: Calling 'SearchAgent' with query.")
+        search_tool = self.specialists.get("search")
+        search_results = search_tool.execute(query=search_query)
+
+        # 3. SYNTHESIZE
+        print("\n[OrchestratorAgent] >> Mission complete. Synthesizing final answer.")
+        synthesis_prompt = f"""
+        Based on the original request '{initial_prompt}' and the following search results:
+        '{search_results}'
+        
+        Provide a final, direct answer to the user's request.
+        """
+        final_response = model.generate_content(synthesis_prompt)
+        return final_response.text.strip()
+```
+
+#### **`main.py`**
+
+This is now a simple, interactive command-line tool.
+
+```python
+# main.py
+from task_manager import Task, add_to_review_queue
+# In the MVP, we bypass the router for simplicity
+# from components.task_router import TaskRouter 
+from components.agent_provisioner import AgentProvisioner
+
+def main():
+    """Main entry point for the agent system."""
+    print("--- 🏢 Agent Firm MVP Initialized ---")
+    print("Enter your query below. Type 'exit' to quit.")
+    
+    provisioner = AgentProvisioner()
+
+    while True:
+        prompt = input("\n> ")
+        if prompt.lower() == 'exit':
+            break
+
+        print("\n--- NEW TASK ---")
+        # 1. Create a task
+        task = Task(prompt=prompt)
+
+        # 2. Provision a team (Router is bypassed in MVP)
+        orchestrator = provisioner.create_team(task)
+
+        # 3. Run the mission
+        solution = orchestrator.run_mission(task.prompt)
+
+        # 4. Log the solution for review
+        add_to_review_queue(task.id, task.prompt, solution)
+        
+        # 5. Output confirmation
+        print(f"\n✅ Task {task.id} processed. Solution is available in 'review_queue.jsonl'.")
+
+if __name__ == "__main__":
+    main()
+```
+
+-----
+
+### \#\# Sample Console Output
+
+When you run `main.py` and enter a query, your terminal output will look like this, giving you a clear, step-by-step view of the system's operation.
+
+```
+--- 🏢 Agent Firm MVP Initialized ---
+Enter your query below. Type 'exit' to quit.
+
+> What was the first movie directed by Quentin Tarantino?
+
+--- NEW TASK ---
+[TaskManager] >> New task created with ID: a1b2c3d4-e5f6-7890-1234-567890abcdef
+
+[AgentProvisioner] >> 📝 Received task. Provisioning new team.
+[AgentProvisioner] >> Calling LLM to generate mission for Orchestrator...
+[AgentProvisioner] >> Mission created: 'Find the first movie directed by Quentin Tarantino using the SearchAgent.'
+[AgentProvisioner] >> Instantiating Orchestrator Agent with a SearchAgent.
+[OrchestratorAgent] >> 🧑‍🏫 New Orchestrator Agent created.
+
+[OrchestratorAgent] >> Mission started: Find the first movie directed by Quentin Tarantino using the SearchAgent.
+[OrchestratorAgent] >> 🤔 THINKING: What search query should I use?
+[OrchestratorAgent] >> Thought complete. Decided on query: 'first movie directed by Quentin Tarantino'
+[OrchestratorAgent] >> 🎬 ACTION: Calling 'SearchAgent' with query.
+
+[SearchAgent] >> 👩‍💻 Executing search for: 'first movie directed by Quentin Tarantino'
+[SearchAgent] >> ✅ Search complete. Returning results.
+
+[OrchestratorAgent] >> Mission complete. Synthesizing final answer.
+[TaskManager] >> Solution for task a1b2c3d4-e5f6-7890-1234-567890abcdef added to review queue.
+
+✅ Task a1b2c3d4-e5f6-7890-1234-567890abcdef processed. Solution is available in 'review_queue.jsonl'.
+
+> 

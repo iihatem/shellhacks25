@@ -1,0 +1,96 @@
+Of course. To ensure the code-generating agent builds the system correctly, it's crucial to provide it with a "design philosophy" and detailed advice for each component. This acts as a reference guide to ensure the implementation consistently reflects the system's architectural principles.
+
+Here is a detailed breakdown of each module's role, responsibilities, and constraints.
+
+***
+
+### ## 🏛️ `main.py`: The Executive Office
+
+* **Core Philosophy:** This script is the **high-level conductor**. Its only job is to initialize the system, handle the user interaction loop, and delegate the entire problem-solving process. It should be clean, simple, and contain no business logic.
+* **Key Responsibilities ("Dos"):**
+    * Initialize the core components it needs to call (in the MVP, just the `AgentProvisioner`).
+    * Run the main `while` loop to accept user input.
+    * Call the first step in the agent workflow (e.g., `provisioner.create_team(...)`).
+    * Print the final confirmation message after the entire process is complete.
+    * Handle the 'exit' command to terminate the program gracefully.
+* **Design Constraints ("Don'ts"):**
+    * **Do not** contain any logic about how to solve a problem.
+    * **Do not** make direct LLM calls.
+    * **Do not** call specialist tools directly. Its role is purely delegation.
+* **Advice for the Agent:**
+    * The `main` function should be minimal. Think of it as the person who receives a customer request and hands it to the correct department manager, then waits to be told the job is done.
+    * Error handling here should be high-level, perhaps a `try...except` block around the main loop to catch unexpected failures and prevent the entire application from crashing.
+
+---
+
+### ## 📂 `task_manager.py`: The Records Department
+
+* **Core Philosophy:** This module is the system's **source of truth** for tasks. It's concerned with data integrity, tracking, and logging. It is completely unaware of how tasks are solved.
+* **Key Responsibilities ("Dos"):**
+    * The `Task` class must assign a **unique and random ID** upon creation. This is critical for tracking.
+    * It should store the original, unaltered user prompt.
+    * The `add_to_review_queue` function should write the output to a file in a structured format like JSON Lines (`.jsonl`). This makes the log easy to parse later.
+    * Each log entry must be self-contained and include the task ID, timestamp, prompt, and the final proposed solution.
+* **Design Constraints ("Don'ts"):**
+    * **Do not** include any methods that modify the prompt or solution. Its job is to record, not process.
+    * **Do not** have any dependencies on the agent components. It should be a standalone utility module.
+* **Advice for the Agent:**
+    * Implement the `Task` class as a simple data container (like a `dataclass`).
+    * Ensure the file I/O in `add_to_review_queue` uses `with open(...)` in append mode (`"a"`) to ensure the file is properly closed and to prevent overwriting previous log entries.
+
+---
+
+### ## 👩‍💻 `components/specialist_agents.py`: The Specialist Employee
+
+* **Core Philosophy:** Each agent here is a **single-purpose tool**. It adheres strictly to the **Single Responsibility Principle**. It is a "dumb" tool that does one thing perfectly and waits to be told what to do. 
+* **Key Responsibilities ("Dos"):**
+    * Expose a single primary method, like `execute(self, ...)`.
+    * The arguments to `execute` should be simple data types (e.g., a string for a search query).
+    * The method should perform its specific action (e.g., call a search API, run a calculation).
+    * Return a simple data type as a result (e.g., a string containing raw search results).
+    * Include clear logging statements indicating when it starts and finishes its job.
+* **Design Constraints ("Don'ts"):**
+    * **Do not** attempt to interpret the results it fetches. Its job is to retrieve data, not analyze it.
+    * **Do not** maintain any memory or state between calls. Every call to `execute` should be independent.
+    * **Do not** call other agents. It is at the bottom of the hierarchy.
+* **Advice for the Agent:**
+    * The `SearchAgent` is a perfect example. Its `execute` method should take a `query: str` and return a `results: str`.
+    * The docstring for the `execute` method is very important. In more advanced systems, an `Orchestrator` might read these docstrings to understand how to use the available tools. Write it clearly (e.g., `"Performs a web search for the given query and returns the raw results."`).
+
+---
+
+### ## 📝 `components/agent_provisioner.py`: The Hiring Manager
+
+* **Core Philosophy:** This component is the **strategist**. It doesn't solve the problem itself but formulates the *plan of attack*. Its primary output is not an answer, but a properly configured agent ready to find the answer.
+* **Key Responsibilities ("Dos"):**
+    * Receive the `Task` object.
+    * Use an LLM to analyze the task's prompt and generate a high-level "mission statement."
+    * Instantiate an `OrchestratorAgent` and provide it with its mission and the necessary specialist tools.
+* **Design Constraints ("Don'ts"):**
+    * **Do not** call any specialist tools. It only "hires" them for the Orchestrator.
+    * **Do not** try to solve the user's problem. Its only job is to create and configure the agent that *will* solve the problem.
+* **Advice for the Agent:**
+    * The LLM prompt is critical here. It must be a **meta-prompt**. It should instruct the LLM to act as a manager.
+    * **Good Prompt Example:** `"You are a manager creating a plan. Based on the user's request '{task.prompt}', write a one-sentence mission for your agent. The agent's name is Orchestrator, and its only tool is a SearchAgent. The mission should be a direct command."`
+    * This component effectively translates a vague user request into a specific, actionable instruction for another AI.
+
+---
+
+### ## 🧑‍🏫 `components/orchestrator.py`: The Team Manager
+
+* **Core Philosophy:** This is the **reasoning brain** for a single task. It owns the problem from start to finish. It is stateful, meaning it keeps track of what it has learned and what it needs to do next.
+* **Key Responsibilities ("Dos"):**
+    * Implement the core **Reason-Act (ReAct) loop**:
+        1.  **Reason/Think:** Analyze the mission and current information to decide on the next step.
+        2.  **Act:** Call the appropriate specialist tool with the necessary arguments.
+    * Maintain an internal "scratchpad" or history of its thoughts and the results of its actions.
+    * Synthesize all gathered information into a final, coherent answer.
+    * Use its LLM brain for all decisions (e.g., "what tool to use?", "is the task complete?").
+* **Design Constraints ("Don'ts"):**
+    * **Do not** have direct access to API keys for its tools. The specialist agents should manage their own keys. This keeps the reasoning engine separate from the implementation details of the tools.
+    * **Do not** contain hard-coded logic for specific tasks. Its ability to solve problems should emerge from its general reasoning capability and the tools it's given.
+* **Advice for the Agent:**
+    * The LLM prompts inside this agent are for **step-by-step reasoning**.
+    * **Good "Think" Prompt:** `"My mission is: '{self.mission}'. I have the following information so far: '{history}'. What is the single best action to take next using my available tools ('search')? My thought process should be..."`
+    * **Good "Synthesis" Prompt:** `"Based on this conversation log '{history}', provide a final answer to the original request: '{initial_prompt}'."`
+    * The logging in this component is the most important for debugging, as it reveals the agent's thought process.
