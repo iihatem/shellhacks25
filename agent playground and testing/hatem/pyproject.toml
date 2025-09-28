@@ -1,0 +1,41 @@
+[project]
+name = "hatem-a2a-platform"
+version = "0.1.0"
+description = "AI Agent Management Platform using Google A2A Protocol"
+authors = [
+    {name = "Hatem", email = "hatem@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "google-genai>=0.8.0",
+    "google-adk>=1.9.0",
+    "a2a-sdk>=0.3.0",
+    "uvicorn>=0.24.0",
+    "fastapi>=0.104.0",
+    "httpx>=0.25.0",
+    "pydantic>=2.5.0",
+    "python-dotenv>=1.0.0",
+    "asyncio-mqtt>=0.11.0",
+    "nest-asyncio>=1.5.8"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
