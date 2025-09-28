@@ -8,6 +8,9 @@ import {
   signOut,
   onAuthStateChanged,
   getRedirectResult,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { auth, googleProvider, db } from "@/lib/firebase";
@@ -28,6 +31,12 @@ interface AuthContextType {
   userProfile: UserProfile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (
+    email: string,
+    password: string,
+    displayName: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
   updateUserType: (userType: string) => Promise<void>;
 }
@@ -121,6 +130,53 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  // Sign in with email and password
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      setLoading(true);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      console.log("Email sign-in successful:", result.user);
+
+      // Create/update user profile
+      const profile = await createUserProfile(result.user);
+      console.log("User profile updated:", profile);
+      setUserProfile(profile);
+    } catch (error) {
+      console.error("Error signing in with email:", error);
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  // Sign up with email and password
+  const signUpWithEmail = async (
+    email: string,
+    password: string,
+    displayName: string
+  ) => {
+    try {
+      setLoading(true);
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("Email sign-up successful:", result.user);
+
+      // Update the user's display name
+      await updateProfile(result.user, { displayName });
+
+      // Create user profile
+      const profile = await createUserProfile(result.user);
+      console.log("User profile created:", profile);
+      setUserProfile(profile);
+    } catch (error) {
+      console.error("Error signing up with email:", error);
+      setLoading(false);
+      throw error;
+    }
+  };
+
   // Sign out
   const logout = async () => {
     try {
@@ -207,6 +263,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     userProfile,
     loading,
     signInWithGoogle,
+    signInWithEmail,
+    signUpWithEmail,
     logout,
     updateUserType,
   };
