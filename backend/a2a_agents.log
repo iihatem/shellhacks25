@@ -1,0 +1,165 @@
+/Users/mac/Desktop/dev/shellhacks25/backend/a2a_quickstart.py:320: UserWarning: [EXPERIMENTAL] RemoteA2aAgent: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  remote_secretary_agent = RemoteA2aAgent(
+/Users/mac/Desktop/dev/shellhacks25/backend/a2a_quickstart.py:326: UserWarning: [EXPERIMENTAL] RemoteA2aAgent: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  remote_hiring_manager_agent = RemoteA2aAgent(
+/Users/mac/Desktop/dev/shellhacks25/backend/a2a_quickstart.py:332: UserWarning: [EXPERIMENTAL] RemoteA2aAgent: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  remote_data_analyst_agent = RemoteA2aAgent(
+/Users/mac/Desktop/dev/shellhacks25/backend/a2a_quickstart.py:338: UserWarning: [EXPERIMENTAL] RemoteA2aAgent: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  remote_researcher_agent = RemoteA2aAgent(
+/Users/mac/Desktop/dev/shellhacks25/backend/a2a_quickstart.py:344: UserWarning: [EXPERIMENTAL] RemoteA2aAgent: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  remote_content_creator_agent = RemoteA2aAgent(
+/Users/mac/Desktop/dev/shellhacks25/backend/a2a_quickstart.py:405: UserWarning: [EXPERIMENTAL] A2aAgentExecutorConfig: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  config = A2aAgentExecutorConfig()
+/Users/mac/Desktop/dev/shellhacks25/backend/a2a_quickstart.py:406: UserWarning: [EXPERIMENTAL] A2aAgentExecutor: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  executor = A2aAgentExecutor(runner=runner, config=config)
+✅ Environment variables configured:
+GOOGLE_GENAI_USE_VERTEXAI: FALSE
+GOOGLE_CLOUD_PROJECT: your-project-id
+GOOGLE_CLOUD_LOCATION: us-central1
+GOOGLE_API_KEY: ✅ Set
+Platform agents loaded successfully!
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/executor/a2a_agent_executor.py:196: UserWarning: [EXPERIMENTAL] convert_a2a_request_to_adk_run_args: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  run_args = convert_a2a_request_to_adk_run_args(
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/converters/request_converter.py:65: UserWarning: [EXPERIMENTAL] convert_a2a_part_to_genai_part: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  parts=[part_converter(part) for part in request.message.parts],
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/executor/a2a_agent_executor.py:228: UserWarning: [EXPERIMENTAL] TaskResultAggregator: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  task_result_aggregator = TaskResultAggregator()
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/executor/a2a_agent_executor.py:231: UserWarning: [EXPERIMENTAL] convert_event_to_a2a_events: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  for a2a_event in convert_event_to_a2a_events(
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/converters/event_converter.py:527: UserWarning: [EXPERIMENTAL] convert_event_to_a2a_message: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  message = convert_event_to_a2a_message(
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/converters/event_converter.py:363: UserWarning: [EXPERIMENTAL] convert_genai_part_to_a2a_part: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  a2a_part = part_converter(part)
+2025-09-28 09:36:15,134 - ERROR - asyncio - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x1160e3b30>
+2025-09-28 09:36:15,134 - ERROR - asyncio - Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x1160fd370>, 31652.01851506)])']
+connector: <aiohttp.connector.TCPConnector object at 0x1160e36b0>
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/agents/remote_a2a_agent.py:386: UserWarning: [EXPERIMENTAL] convert_genai_part_to_a2a_part: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  converted_part = self._genai_part_converter(part)
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/converters/event_converter.py:210: UserWarning: [EXPERIMENTAL] convert_a2a_message_to_event: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  return convert_a2a_message_to_event(
+/Users/mac/Desktop/dev/shellhacks25/backend/venv/lib/python3.12/site-packages/google/adk/a2a/converters/event_converter.py:280: UserWarning: [EXPERIMENTAL] convert_a2a_part_to_genai_part: ADK Implementation for A2A support (A2aAgentExecutor, RemoteA2aAgent and corresponding supporting components etc.) is in experimental mode and is subjected to breaking changes. A2A protocol and SDK arethemselves not experimental. Once it's stable enough the experimental mode will be removed. Your feedback is welcome.
+  part = part_converter(a2a_part)
+2025-09-28 09:36:36,032 - ERROR - asyncio - Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x1161a3230>, 31679.659816878)])']
+connector: <aiohttp.connector.TCPConnector object at 0x11618c860>
+✅ All platform agent servers started!
+   - Secretary Agent: http://127.0.0.1:10020
+   - Hiring Manager Agent: http://127.0.0.1:10021
+   - Data Analyst Agent: http://127.0.0.1:10022
+   - Researcher Agent: http://127.0.0.1:10023
+   - Content Creator Agent: http://127.0.0.1:10024
+   - Master Orchestrator: http://127.0.0.1:10025
+
+🧪 Testing Platform Agents via A2A Protocol...
+
+📋 Testing Secretary Agent...
+Secretary Response: Okay, I can certainly help you with that! To best assist you, let's break this down a bit.
+
+For **Data Analysis**, do you have any specific goals in mind? For example:
+
+*   **What kind of data are you working with?** (e.g., sales figures, website traffic, customer demographics)
+*   **What questions are you hoping to answer with the data?** (e.g., identify trends, understand customer behavior, improve marketing ROI)
+*   **What specific analysis do you need?** (e.g., descriptive statistics, regression analysis, data visualization)
+
+For **Content Creation**, could you tell me more about what you need? For example:
+
+*   **What type of content are you looking to create?** (e.g., blog posts, social media updates, website copy, marketing materials)
+*   **What is the topic or subject matter of the content?**
+*   **What is the target audience for the content?**
+*   **What is the purpose of the content?** (e.g., inform, entertain, persuade, drive sales)
+
+Once I have a better understanding of your needs, I can connect you with the appropriate specialists on our platform who can provide the best assistance for data analysis and content creation.
+
+
+🏢 Testing Hiring Manager Agent...
+Hiring Manager Response: Okay, I can help with that. It seems like the existing agents do not have the specific expertise in financial analysis and budgeting that you require. Therefore, I will create a new agent to fulfill this need.
+
+I will create a `data_analyst` agent with specialized instructions for financial analysis and budgeting. This agent will be equipped to handle tasks such as financial modeling, budget forecasting, variance analysis, and investment analysis.
+
+Agent Details:
+- Agent Type: `data_analyst`
+- Specialization: Financial Analysis and Budgeting
+- Capabilities: Financial modeling, budget forecasting, variance analysis, investment analysis
+
+I have created the `data_analyst` agent with the specified specialization. This agent should now be able to assist you with your financial analysis and budgeting tasks.
+
+
+📊 Testing Data Analyst Agent...
+Data Analyst Response: Okay, I can analyze the performance trends of e-commerce companies in Q4 2024. To provide a focused and relevant analysis, could you clarify the following:
+
+*   **Which e-commerce companies or types of e-commerce companies are you interested in?** (e.g., Amazon, Shopify stores, luxury e-commerce, a specific region, etc.)
+*   **What specific performance metrics are most important?** (e.g., revenue growth, website traffic, conversion rates, customer acquisition cost, average order value, net profit margin, etc.)
+*   **Do you have a specific region or market in mind?** (e.g., North America, Europe, Asia-Pacific)
+*   **Are there any specific events or market conditions that should be considered?** (e.g., major sales events like Black Friday/Cyber Monday, economic downturns, changes in regulations)
+*   **What data sources are available?** (e.g., company financial reports, industry reports, web analytics data. Do I need to find these myself?)
+
+In the meantime, I will perform some general searches to gather preliminary information about e-commerce performance in Q4 2024.
+
+
+
+🔍 Testing Researcher Agent...
+Researcher Response: Okay, I will research the latest developments in sustainable energy technologies. To make sure I cover the most important aspects, I will focus on:
+
+*   What are the newest advancements in solar energy?
+*   What are the newest advancements in wind energy?
+*   What are the newest advancements in battery storage?
+*   What are the newest advancements in geothermal energy?
+*   What are the newest advancements in hydroelectric energy?
+
+
+
+✍️ Testing Content Creator Agent...
+Content Creator Response: Okay, I can do that! Here are some search queries I will use to gather information for a blog post about the future of AI in healthcare:
+
+
+
+🎭 Testing Master Orchestrator Agent...
+Master Orchestrator Response: Here's a comprehensive report on current AI trends, market data, and marketing content for 2025:
+
+**Executive Summary**
+
+The artificial intelligence (AI) landscape in 2025 is characterized by rapid growth, increasing adoption across various industries, and significant advancements in AI technologies such as generative AI and agentic AI. The global AI market is projected to reach between $371.71 billion and $391 billion in 2025. It is expected to grow to between $826.7 billion and $2.4 trillion by 2030, exhibiting a compound annual growth rate (CAGR) of approximately 30% to 37.6%. This growth is fueled by increasing investments in AI research and development, the expansion of generative AI, and the growing adoption of AI across various industries. North America currently dominates the AI market, but the Asia-Pacific region is expected to experience the highest CAGR in the coming years.
+
+**Current AI Trends**
+
+*   **Generative AI:** Generative AI is a major trend, with the market projected to reach $62.72 billion in 2025. It is expected to grow at a CAGR of 37.6% to 46.47% between 2025 and 2030. Generative AI is being used to create marketing copy, visuals, and video content at scale.
+*   **AI Agents:** AI-powered agents are another significant trend. Deloitte predicts that 25% of enterprises using generative AI are expected to deploy AI agents in 2025, growing to 50% by 2027. AI agents are expected to improve workflow and automate marketing initiatives.
+*   **Ethical AI:** As AI becomes more prevalent, ethical considerations are gaining importance. Algorithmic bias, data privacy, and societal impacts are key concerns. Regulatory frameworks like the EU's AI Act are being developed to ensure AI serves humanity responsibly.
+*   **AI in Healthcare:** AI is transforming the healthcare sector, with applications in diagnostics, personalized medicine, and drug discovery. The AI in healthcare market is projected to reach $39.25 billion in 2025 and $504.17 billion by 2032, exhibiting a CAGR of 44.0%.
+*   **AI in Finance:** AI is significantly impacting the financial services industry, with applications in fraud detection, risk management, and personalized financial advice. AI tools are being used to automate tasks, improve accuracy, and drive smarter decision-making.
+
+**Market Data Analysis**
+
+*   **Market Size and Growth:** The global AI market is experiencing rapid growth, with projections reaching between $371.71 billion and $391 billion in 2025. The market is expected to grow at a CAGR of around 30% to 37.6% from 2025 to 2030.
+*   **Key Growth Drivers:** Several factors are driving this growth, including increasing investments in AI research and development, the expansion of generative AI, and the growing adoption of AI across various industries.
+*   **Regional Trends:** North America currently dominates the AI market, but the Asia-Pacific region is expected to experience the highest CAGR in the coming years.
+*   **Technology Insights:** Machine learning (ML) is a prominent technology, and deep learning and machine vision are also growing.
+*   **End-Use Industries:** The healthcare sector is a leading end-use industry for AI, but other key industries include automotive, retail, finance, and manufacturing.
+*   **Investment Trends:** AI investment is expanding, with generative AI attracting significant private investment. Governments worldwide are also making substantial investments in AI research and development.
+
+**Report Compilation and Marketing Content**
+
+This information can be compiled into a comprehensive report with the following sections:
+
+1.  **Introduction:** Overview of AI and its impact on various industries.
+2.  **Current AI Trends:** Detailed analysis of generative AI, AI agents, ethical AI, and other emerging trends.
+3.  **Market Data Analysis:** Examination of market size, growth drivers, regional trends, and investment trends.
+4.  **AI Adoption by Industry:** Overview of AI adoption in healthcare, finance, manufacturing, and other sectors.
+5.  **Ethical Considerations:** Discussion of algorithmic bias, data privacy, and societal impacts.
+6.  **The Future of AI:** Projections and predictions for the AI market in 2025 and beyond.
+
+**Marketing Content Highlights:**
+
+*   **AI is revolutionizing industries:** Highlight how AI is transforming various sectors such as healthcare, finance, and manufacturing.
+*   **Generative AI is the future:** Emphasize the growth and potential of generative AI in creating content, accelerating development, and driving value creation.
+*   **AI adoption is accelerating:** Showcase the increasing adoption of AI by businesses and the benefits of integrating AI into their operations.
+*   **Investment opportunities abound:** Highlight the growing investment in AI and the potential for long-term business growth.
+*   **Ethical AI is essential:** Underscore the importance of responsible AI development and deployment.
+*   **AI is creating new jobs:** Highlight the potential for AI to generate new jobs and improve the workforce.
+
+This comprehensive report and marketing content will provide valuable insights into the current AI landscape and its potential for the future.
+
+
+✅ All agent tests completed!

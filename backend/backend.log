@@ -1,0 +1,15 @@
+INFO:     Started server process [65288]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:61830 - "GET /agents/status HTTP/1.1" 200 OK
+ERROR:a2a_client_service:Failed to fetch agent card from http://127.0.0.1:10022: All connection attempts failed
+INFO:     127.0.0.1:61840 - "POST /chat HTTP/1.1" 200 OK
+ERROR:a2a_client_service:Failed to fetch agent card from http://127.0.0.1:10023: All connection attempts failed
+INFO:     127.0.0.1:61850 - "POST /chat HTTP/1.1" 200 OK
+ERROR:a2a_client_service:Failed to fetch agent card from http://127.0.0.1:10024: All connection attempts failed
+INFO:     127.0.0.1:61852 - "POST /chat HTTP/1.1" 200 OK
+ERROR:a2a_client_service:Failed to fetch agent card from http://127.0.0.1:10021: All connection attempts failed
+INFO:     127.0.0.1:61854 - "POST /chat HTTP/1.1" 200 OK
+ERROR:a2a_client_service:Failed to fetch agent card from http://127.0.0.1:10020: All connection attempts failed
+INFO:     127.0.0.1:61856 - "POST /chat HTTP/1.1" 200 OK

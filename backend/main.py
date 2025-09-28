@@ -3,10 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import os
+import logging
 from dotenv import load_dotenv
+from a2a_client_service import a2a_client
 
 # Load environment variables
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title="AI Agent Management Platform",
@@ -91,6 +96,27 @@ async def create_agent(agent: Agent):
     agents_db.append(agent_dict)
     return agent_dict
 
+@app.get("/agents/status")
+async def get_agent_status():
+    """Get the status of all A2A agents"""
+    try:
+        status = await a2a_client.get_agent_status()
+        return {
+            "agents": status,
+            "total_agents": len(status),
+            "active_agents": sum(1 for active in status.values() if active),
+            "all_active": all(status.values())
+        }
+    except Exception as e:
+        logging.error(f"Error checking agent status: {e}")
+        return {
+            "error": "Failed to check agent status",
+            "agents": {},
+            "total_agents": 0,
+            "active_agents": 0,
+            "all_active": False
+        }
+
 @app.get("/agents/{agent_id}", response_model=Agent)
 async def get_agent(agent_id: str):
     """Get a specific agent by ID"""
@@ -113,22 +139,38 @@ async def create_task(task: Task):
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat_with_secretary(message: ChatMessage):
-    """Main chat endpoint - communicates with the secretary agent"""
-    # This is a placeholder implementation
-    # In a real implementation, this would integrate with AI/LLM services
-    
-    secretary = next((a for a in agents_db if a["role"] == "secretary"), None)
-    if not secretary:
-        raise HTTPException(status_code=500, detail="Secretary agent not found")
-    
-    # Simple response logic (to be replaced with actual AI integration)
-    response_text = f"Hello! I'm your {secretary['name']}. I've received your message: '{message.message}'. Let me analyze what needs to be done and delegate accordingly."
-    
-    return ChatResponse(
-        response=response_text,
-        agent_name=secretary["name"],
-        action_taken="message_received"
-    )
+    """Main chat endpoint - communicates with A2A agents"""
+    try:
+        # Route the message to the appropriate agent
+        response_text, agent_name = await a2a_client.route_message(
+            message.message, 
+            message.user_id
+        )
+        
+        # Determine action taken based on response content
+        action_taken = "message_processed"
+        if "task" in response_text.lower() and ("created" in response_text.lower() or "assigned" in response_text.lower()):
+            action_taken = "task_created"
+        elif "agent" in response_text.lower() and ("created" in response_text.lower() or "hired" in response_text.lower()):
+            action_taken = "agent_created"
+        elif "research" in response_text.lower() or "analysis" in response_text.lower():
+            action_taken = "research_completed"
+        elif "content" in response_text.lower() or "written" in response_text.lower():
+            action_taken = "content_created"
+        
+        return ChatResponse(
+            response=response_text,
+            agent_name=agent_name,
+            action_taken=action_taken
+        )
+        
+    except Exception as e:
+        logging.error(f"Error in chat endpoint: {e}")
+        return ChatResponse(
+            response="I'm sorry, I'm experiencing some technical difficulties. Please make sure the A2A agent servers are running and try again.",
+            agent_name="System",
+            action_taken="error"
+        )
 
 if __name__ == "__main__":
     import uvicorn
