@@ -199,15 +199,15 @@ export default function FloatingChatInterface({
   };
 
   return (
-    <div className="mx-4 my-4 bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
+    <div className="mx-4 my-4 bg-card rounded-xl shadow-lg border border-border flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
       {/* Chat Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gray-50 rounded-t-xl">
+      <div className="flex items-center justify-between p-4 border-b border-border bg-muted rounded-t-xl">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10 bg-blue-500 flex items-center justify-center text-white font-medium">
             MF
           </Avatar>
           <div>
-            <h3 className="font-medium text-gray-900">Mary Franci</h3>
+            <h3 className="font-medium text-card-foreground">Mary Franci</h3>
             <div className="flex items-center gap-2">
               <Phone className="w-3 h-3 text-gray-400" />
               <span className="text-sm text-gray-500">+ (1) 234-543-4321</span>
@@ -229,7 +229,7 @@ export default function FloatingChatInterface({
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+      <div className="flex-1 p-4 overflow-y-auto bg-muted">
         <div className="space-y-4">
           {messages.map((message) => (
             <div
@@ -279,8 +279,8 @@ export default function FloatingChatInterface({
                 <div
                   className={`rounded-2xl px-4 py-3 ${
                     message.sender === "user"
-                      ? "bg-blue-500 text-white self-end"
-                      : "bg-white text-gray-900 border border-gray-200"
+                      ? "bg-primary text-primary-foreground self-end"
+                      : "bg-card text-card-foreground border border-border"
                   }`}
                 >
                   {message.type === "file" ? (
@@ -316,9 +316,19 @@ export default function FloatingChatInterface({
               </div>
 
               {message.sender === "user" && (
-                <Avatar className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-medium ml-3 mt-1">
-                  {getInitials(getUserName())}
-                </Avatar>
+                <div className="ml-3 mt-1">
+                  {getUserAvatar() ? (
+                    <img
+                      src={getUserAvatar()}
+                      alt={getUserName()}
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <Avatar className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-medium">
+                      {getInitials(getUserName())}
+                    </Avatar>
+                  )}
+                </div>
               )}
             </div>
           ))}
@@ -354,7 +364,7 @@ export default function FloatingChatInterface({
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gray-100 bg-white rounded-b-xl">
+      <div className="p-4 border-t border-border bg-card rounded-b-xl">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm">
             <Paperclip className="w-4 h-4" />
@@ -367,7 +377,7 @@ export default function FloatingChatInterface({
               onKeyPress={handleKeyPress}
               placeholder="Ask your AI assistant anything..."
               disabled={isLoading}
-              className="pr-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+              className="pr-10 border-border focus:border-ring focus:ring-ring bg-card text-card-foreground placeholder:text-muted-foreground"
             />
             <Button
               variant="ghost"

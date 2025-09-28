@@ -13,6 +13,7 @@ import FloatingChatInterface from "./FloatingChatInterface";
 import Dashboard from "./Dashboard";
 import AgentsList from "./AgentsList";
 import TasksList from "./TasksList";
+import SettingsPage from "./SettingsPage";
 import { Search, Mail, Bell, Play } from "lucide-react";
 
 export default function AppLayout() {
@@ -60,7 +61,7 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="h-screen flex bg-gray-50 overflow-hidden">
+    <div className="h-screen flex bg-background overflow-hidden">
       {/* Sidebar */}
       <AppSidebar
         activeSection={activeSection}
@@ -71,19 +72,19 @@ export default function AppLayout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-grey px-6 py-4">
+        <header className="bg-card border-b border-border px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex-1 mx-6 mr-10">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder="Search agents, tasks, or settings..."
-                  className="pl-10 bg-white border-gray-200 shadow-sm"
+                  className="pl-10 bg-card border-border shadow-sm text-card-foreground placeholder:text-muted-foreground"
                 />
               </div>
             </div>
 
-            <div className="bg-white rounded-full shadow-sm border border-gray-200 px-6 py-3">
+            <div className="bg-card rounded-full shadow-sm border border-border px-6 py-3">
               <div className="flex items-center gap-2.5">
                 <Button variant="ghost" size="sm">
                   <Mail className="w-5 h-5 text-gray-600" />
@@ -103,7 +104,7 @@ export default function AppLayout() {
                       {getInitials(getUserName())}
                     </Avatar>
                   )}
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-card-foreground">
                     {getUserName()}
                   </span>
                 </div>
@@ -165,12 +166,5 @@ function TasksContent() {
 
 // Settings Content Component
 function SettingsContent() {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
-      <Card className="p-6">
-        <p className="text-gray-600">Settings panel coming soon...</p>
-      </Card>
-    </div>
-  );
+  return <SettingsPage />;
 }

@@ -36,21 +36,21 @@ export default function AppSidebar({
   ];
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
+    <div className="w-64 bg-card border-r border-border flex flex-col h-full">
       {/* Header */}
       <div className="p-6">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
             <Play className="w-4 h-4 text-white" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900">Coursue</h1>
+          <h1 className="text-xl font-bold text-card-foreground">Coursue</h1>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 p-4">
         <div className="space-y-1 mb-8">
-          <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">
+          <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
             OVERVIEW
           </h3>
           {navigationItems.map((item) => (
@@ -59,8 +59,8 @@ export default function AppSidebar({
               onClick={() => onSectionChange(item.id)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
                 activeSection === item.id
-                  ? "bg-blue-50 text-blue-700 border-r-2 border-r-blue-600"
-                  : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-accent text-accent-foreground border-r-2 border-r-blue-600"
+                  : "text-card-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
               <item.icon
