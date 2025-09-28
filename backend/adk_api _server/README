@@ -1,0 +1,124 @@
+To use,
+run the command 
+apk api_server
+
+This creates a fastapi quick server to allow the agents to be be called upon easily via curl/post stuff
+
+This creates a session to allow you to use it, basically create a chatbox
+
+curl -X POST http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_123 \
+  -H "Content-Type: application/json" \
+  -d '{"state": {"key1": "value1", "key2": 42}}'
+
+
+This runs the command/request to that agent, with the information
+
+curl -X POST http://localhost:8000/run \
+-H "Content-Type: application/json" \
+-d '{
+"app_name": "my_sample_agent",
+"user_id": "u_123",
+"session_id": "s_123",
+"new_message": {
+    "role": "user",
+    "parts": [{
+    "text": "Hey whats the weather in new york today"
+    }]
+}
+}'
+
+To allow streaming/thoughts rambling add 
+    "streaming": true
+as part of the -d
+
+curl -X POST http://localhost:8000/run_sse \
+-H "Content-Type: application/json" \
+-d '{
+"app_name": "my_sample_agent",
+"user_id": "u_123",
+"session_id": "s_123",
+"new_message": {
+    "role": "user",
+    "parts": [{
+    "text": "Hey whats the weather in new york today"
+    }]
+},
+"streaming": true
+}'
+
+add files via base64:
+
+curl -X POST http://localhost:8000/run \
+-H 'Content-Type: application/json' \
+-d '{
+   "appName":"my_sample_agent",
+   "userId":"u_123",
+   "sessionId":"s_123",
+   "newMessage":{
+      "role":"user",
+      "parts":[
+         {
+            "text":"Describe this image"
+         },
+         {
+            "inlineData":{
+               "displayName":"my_image.png",
+               "data":"iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAACXBIWXMAAAsTAAALEwEAmpw...",
+               "mimeType":"image/png"
+            }
+         }
+      ]
+   },
+   "streaming":false
+}'
+
+To see what agents are existing:
+
+curl -X GET http://localhost:8000/list-apps
+
+    ["my_sample_agent"]
+
+
+create a new session:
+
+curl -X POST http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_123 \
+  -H "Content-Type: application/json" \
+  -d '{"state": {"visit_count": 5}}'
+
+get a new session:
+
+curl -X GET http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_123
+
+
+curl -X DELETE http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_123
+
+
+Run Agent (single response)
+    /run
+    POST
+
+    body:
+    {
+        "app_name": "my_sample_agent",
+        "user_id": "u_123",
+        "session_id": "s_abc",
+        "new_message": {
+            "role": "user",
+            "parts": [
+            { "text": "What is the capital of France?" }
+            ]
+        }
+    }
+
+all together:
+curl -X POST http://localhost:8000/run \
+  -H "Content-Type: application/json" \
+  -d '{
+    "app_name": "my_sample_agent",
+    "user_id": "u_123",
+    "session_id": "s_abc",
+    "new_message": {
+      "role": "user",
+      "parts": [{"text": "What is the capital of France?"}]
+    }
+  }'
