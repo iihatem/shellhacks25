@@ -1,7 +1,6 @@
 // Base API configuration and client
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-console.log("API_BASE_URL:", API_BASE_URL); // Debug log
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
 
 export interface ApiResponse<T = any> {
   data?: T;
@@ -21,7 +20,6 @@ export class ApiClient {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    console.log(`API Request: ${options.method || 'GET'} ${url}`); // Debug logging
     
     const defaultHeaders = {
       'Content-Type': 'application/json',
@@ -32,7 +30,6 @@ export class ApiClient {
       const response = await fetch(url, {
         ...options,
         headers: defaultHeaders,
-        mode: 'cors', // Explicitly set CORS mode
       });
 
       const status = response.status;

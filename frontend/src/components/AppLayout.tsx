@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "./AppSidebar";
 import StatisticsCard from "./StatisticsCard";
-import SecretaryChat from "./SecretaryChat";
+import FloatingChatInterface from "./FloatingChatInterface";
 import Dashboard from "./Dashboard";
 import AgentsList from "./AgentsList";
 import TasksList from "./TasksList";
@@ -133,7 +133,12 @@ export default function AppLayout() {
 
 // Dashboard Content Component
 function DashboardContent() {
-  return <SecretaryChat />;
+  const handleTaskCreated = () => {
+    // Could refresh tasks or show notification
+    console.log("Task created by AI agent");
+  };
+
+  return <FloatingChatInterface onTaskCreated={handleTaskCreated} />;
 }
 
 // Agents Content Component
