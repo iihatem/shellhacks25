@@ -59,7 +59,7 @@ class A2APlatformTester:
                 card_data = response.json()
                 agent_card = AgentCard(**card_data)
                 
-                print(f"✅ {agent_name}: {agent_card.name}")
+                print(f" {agent_name}: {agent_card.name}")
                 print(f"   Description: {agent_card.description}")
                 print(f"   Skills: {len(agent_card.skills or [])} skills")
                 print()
@@ -107,10 +107,10 @@ class A2APlatformTester:
                 task = responses[0][0]
                 try:
                     response_text = task.artifacts[0].parts[0].root.text
-                    print(f"✅ {agent_name} response: {response_text[:200]}...")
+                    print(f" {agent_name} response: {response_text[:200]}...")
                     return True
                 except (AttributeError, IndexError):
-                    print(f"✅ {agent_name} responded (could not extract text)")
+                    print(f" {agent_name} responded (could not extract text)")
                     return True
             else:
                 print(f"❌ {agent_name}: No response received")
@@ -212,10 +212,10 @@ class A2APlatformTester:
         print("🏁 Test Results Summary")
         print("=" * 50)
         
-        print(f"Agent Discovery: {'✅ PASS' if discovery_success else '❌ FAIL'}")
-        print(f"Secretary Agent: {'✅ PASS' if results['secretary'] else '❌ FAIL'}")
-        print(f"Hiring Manager: {'✅ PASS' if results['hiring_manager'] else '❌ FAIL'}")
-        print(f"Employee Agents: {'✅ PASS' if employees_success else '❌ FAIL'}")
+        print(f"Agent Discovery: {' PASS' if discovery_success else '❌ FAIL'}")
+        print(f"Secretary Agent: {' PASS' if results['secretary'] else '❌ FAIL'}")
+        print(f"Hiring Manager: {' PASS' if results['hiring_manager'] else '❌ FAIL'}")
+        print(f"Employee Agents: {' PASS' if employees_success else '❌ FAIL'}")
         print()
         print(f"Overall Result: {'🎉 ALL TESTS PASSED' if results['overall_success'] else '⚠️  SOME TESTS FAILED'}")
         

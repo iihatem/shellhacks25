@@ -32,7 +32,7 @@ async def test_agents():
                 response = await client.get(f"{url}/.well-known/agent-card.json")
                 if response.status_code == 200:
                     card = response.json()
-                    print(f"✅ {name}: {card.get('name', 'Unknown')}")
+                    print(f" {name}: {card.get('name', 'Unknown')}")
                 else:
                     print(f"❌ {name}: HTTP {response.status_code}")
                     all_good = False

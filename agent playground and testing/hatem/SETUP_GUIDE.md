@@ -1,6 +1,6 @@
 # A2A Agent Management Platform - Setup Guide
 
-## 🎯 Overview
+## Overview
 
 This is a complete implementation of an AI Agent Management Platform using Google's Agent2Agent (A2A) Protocol. The platform implements your requested secretary-employee-hiring manager workflow with full A2A compliance.
 
@@ -28,7 +28,7 @@ This is a complete implementation of an AI Agent Management Platform using Googl
                     └─────────────────┘
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Set up Environment
 
@@ -187,12 +187,12 @@ LOG_LEVEL=INFO
 
 The test suite validates:
 
-- ✅ Agent discovery (agent cards)
-- ✅ A2A communication protocol
-- ✅ Secretary coordination
-- ✅ Hiring manager capabilities
-- ✅ Employee agent functionality
-- ✅ Multi-agent workflows
+- Agent discovery (agent cards)
+- A2A communication protocol
+- Secretary coordination
+- Hiring manager capabilities
+- Employee agent functionality
+- Multi-agent workflows
 
 ## 🔒 Security Features
 
@@ -201,7 +201,7 @@ The test suite validates:
 - Proper error handling and logging
 - Agent health monitoring
 
-## 🚀 Next Steps
+## Next Steps
 
 1. **Frontend Integration**: The platform is ready to be integrated with your existing frontend
 2. **Authentication**: Add authentication for production use
@@ -235,11 +235,11 @@ If ports 10000-10002+ are in use:
 
 You now have a fully functional A2A-compliant AI Agent Management Platform that implements:
 
-- ✅ Secretary-Employee-Hiring Manager workflow
-- ✅ Google A2A Protocol compliance
-- ✅ Dynamic agent creation and discovery
-- ✅ Multi-agent coordination and communication
-- ✅ Comprehensive testing suite
-- ✅ Production-ready architecture
+- Secretary-Employee-Hiring Manager workflow
+- Google A2A Protocol compliance
+- Dynamic agent creation and discovery
+- Multi-agent coordination and communication
+- Comprehensive testing suite
+- Production-ready architecture
 
 The platform is ready for integration with your frontend and can be extended with additional agent types and capabilities as needed!

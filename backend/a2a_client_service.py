@@ -24,6 +24,7 @@ class A2AClientService:
             "data_analyst": "http://127.0.0.1:10022",
             "researcher": "http://127.0.0.1:10023",
             "content_creator": "http://127.0.0.1:10024",
+            "agent_builder": "http://127.0.0.1:10026",
             "orchestrator": "http://127.0.0.1:10025"
         }
     
@@ -148,6 +149,10 @@ class A2AClientService:
         elif any(word in message_lower for word in ["write", "content", "blog", "article", "marketing", "copy"]):
             response = await self.send_message_to_agent("content_creator", message)
             return response, "Content Creator"
+        
+        elif any(word in message_lower for word in ["build", "create system", "yaml", "configuration", "multi-agent", "architecture", "agent system"]):
+            response = await self.send_message_to_agent("agent_builder", message)
+            return response, "Agent Builder Assistant"
         
         elif any(word in message_lower for word in ["complex", "multiple", "orchestrate", "coordinate"]):
             response = await self.send_message_to_orchestrator(message)

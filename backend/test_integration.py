@@ -110,7 +110,7 @@ def test_chat_integration():
             assert data["agent_name"] == test_case["expected_agent"], \
                 f"Expected {test_case['expected_agent']}, got {data['agent_name']}"
             
-            print("✅ Test passed!\n")
+            print(" Test passed!\n")
         
         # Test agent status endpoint
         print("Testing Agent Status Endpoint...")
@@ -122,15 +122,15 @@ def test_chat_integration():
         
         assert status_data["all_active"] == True
         assert status_data["total_agents"] == 6
-        print("✅ Agent status test passed!\n")
+        print(" Agent status test passed!\n")
         
         print("🎉 All integration tests passed!")
         print("\n📋 Summary:")
-        print("✅ Chat endpoint routes messages to correct agents")
-        print("✅ Agent responses are properly formatted")
-        print("✅ Agent status endpoint works correctly")
-        print("✅ Error handling works as expected")
-        print("\n🚀 The frontend chatbot is now ready to communicate with A2A agents!")
+        print(" Chat endpoint routes messages to correct agents")
+        print(" Agent responses are properly formatted")
+        print(" Agent status endpoint works correctly")
+        print(" Error handling works as expected")
+        print("\n The frontend chatbot is now ready to communicate with A2A agents!")
 
 if __name__ == "__main__":
     test_chat_integration()

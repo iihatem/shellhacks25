@@ -148,7 +148,7 @@ Example: "Create a research agent specialized in technology trends"
             self.next_port += 1
             
             await event_queue.enqueue_event(
-                new_agent_text_message(f"🚀 Creating a new {agent_type.replace('_', ' ').title()} specialized in {specialization}...")
+                new_agent_text_message(f" Creating a new {agent_type.replace('_', ' ').title()} specialized in {specialization}...")
             )
             
             # Start the agent in background
@@ -163,7 +163,7 @@ Example: "Create a research agent specialized in technology trends"
             }
             
             response = f"""
-✅ **Agent Created Successfully!**
+ **Agent Created Successfully!**
 
 **Agent Type:** {agent_type.replace('_', ' ').title()}
 **Specialization:** {specialization}
@@ -277,7 +277,7 @@ To create a new agent, just ask me like:
         else:
             response = "🤖 **Agents I've Created:**\n\n"
             for port, info in self.created_agents.items():
-                status_emoji = "✅" if info['status'] == 'running' else "🚀" if info['status'] == 'starting' else "❌"
+                status_emoji = "" if info['status'] == 'running' else "" if info['status'] == 'starting' else "❌"
                 response += f"{status_emoji} **{info['type'].replace('_', ' ').title()}**\n"
                 response += f"   - Specialization: {info['specialization']}\n"
                 response += f"   - URL: http://{PLATFORM_HOST}:{port}\n"

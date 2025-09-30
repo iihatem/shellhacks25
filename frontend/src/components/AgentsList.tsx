@@ -17,6 +17,14 @@ const getRoleIcon = (role: string) => {
       return <UserCheck className="w-4 h-4" />;
     case "hiring_manager":
       return <Users className="w-4 h-4" />;
+    case "data_analyst":
+      return <Activity className="w-4 h-4" />;
+    case "researcher":
+      return <Zap className="w-4 h-4" />;
+    case "content_creator":
+      return <Bot className="w-4 h-4" />;
+    case "agent_builder":
+      return <Bot className="w-4 h-4" />;
     default:
       return <Bot className="w-4 h-4" />;
   }
@@ -28,8 +36,16 @@ const getRoleColor = (role: string) => {
       return "bg-blue-600";
     case "hiring_manager":
       return "bg-green-600";
-    default:
+    case "data_analyst":
+      return "bg-orange-600";
+    case "researcher":
       return "bg-purple-600";
+    case "content_creator":
+      return "bg-pink-600";
+    case "agent_builder":
+      return "bg-indigo-600";
+    default:
+      return "bg-gray-600";
   }
 };
 
@@ -62,10 +78,10 @@ export default function AgentsList({ agents, loading }: AgentsListProps) {
     return (
       <div className="text-center py-8 text-gray-500 border border-gray-100 rounded-lg bg-gray-50/50">
         <Bot className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-        <h3 className="font-medium text-gray-700 mb-2">
-          No agents in your workspace yet
-        </h3>
-        <p className="text-sm text-gray-600">Send a message to get started!</p>
+        <h3 className="font-medium text-gray-700 mb-2">No agents available</h3>
+        <p className="text-sm text-gray-600">
+          Start a conversation to activate AI agents!
+        </p>
       </div>
     );
   }
@@ -87,9 +103,19 @@ export default function AgentsList({ agents, loading }: AgentsListProps) {
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-2">
-              <h4 className="font-medium text-sm text-gray-900 truncate">
-                {agent.name}
-              </h4>
+              <div className="flex items-center space-x-2">
+                <h4 className="font-medium text-sm text-gray-900 truncate">
+                  {agent.name}
+                </h4>
+                {agent.id.startsWith("a2a-") && (
+                  <Badge
+                    variant="outline"
+                    className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                  >
+                    A2A
+                  </Badge>
+                )}
+              </div>
               <div className="flex items-center space-x-2">
                 {agent.is_active && (
                   <div className="flex items-center space-x-1">

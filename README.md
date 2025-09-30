@@ -10,7 +10,7 @@ A fullstack application that creates and manages AI agents to handle tasks and j
 - **Database**: PostgreSQL (configured, not yet implemented)
 - **Caching**: Redis (configured, not yet implemented)
 
-## 🚀 Features
+## Features
 
 ### Current Implementation
 
@@ -68,7 +68,7 @@ shellhacks25/
 └── README.md
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -173,7 +173,7 @@ The platform comes with two pre-configured agents:
    - Capabilities: Agent creation, skill assessment, recruitment
    - Purpose: Creates new specialized agents when existing ones can't handle tasks
 
-## 🎯 Workflow Example
+## Workflow Example
 
 1. **User** sends a message: "I need to analyze our sales data and create a report"
 2. **Secretary Agent** receives the message and analyzes the task

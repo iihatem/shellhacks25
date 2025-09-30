@@ -7,16 +7,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { services, Message } from "@/services";
-import {
-  Send,
-  Paperclip,
-  Mic,
-  Smile,
-  Phone,
-  Video,
-  Info,
-  Loader2,
-} from "lucide-react";
+import { Send, Paperclip, Mic, Smile, Info, Loader2 } from "lucide-react";
 
 interface ChatMessage {
   id: string;
@@ -41,65 +32,11 @@ export default function FloatingChatInterface({
   const { user, userProfile } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: "1",
-      text: "Can I try the software first?",
-      sender: "contact",
-      timestamp: new Date(Date.now() - 300000),
-      status: "read",
-    },
-    {
-      id: "2",
-      text: "Sure. Here is the demo unit. You can use it as long as you want.",
-      sender: "user",
-      timestamp: new Date(Date.now() - 240000),
-      status: "delivered",
-    },
-    {
-      id: "3",
-      text: "Thank you. Now I want to buy the software. Which type of subscription do you have?",
-      sender: "contact",
-      timestamp: new Date(Date.now() - 180000),
-      status: "read",
-    },
-    {
-      id: "4",
-      text: "We have many type of subscription in this presentations. Please look at this showcase.",
-      sender: "user",
-      timestamp: new Date(Date.now() - 120000),
-      status: "delivered",
-    },
-    {
-      id: "5",
-      text: "Presentation.pdf",
-      sender: "user",
-      timestamp: new Date(Date.now() - 120000),
-      type: "file",
-      fileName: "Presentation.pdf",
-      fileSize: "254 KB",
-      status: "delivered",
-    },
-    {
-      id: "6",
-      text: "Thanks. I will watch it later!",
-      sender: "contact",
-      timestamp: new Date(Date.now() - 60000),
-      status: "read",
-    },
-    // Separator message
-    {
-      id: "separator",
-      text: "--- New Conversation ---",
-      sender: "agent",
-      agentName: "System",
-      timestamp: new Date(Date.now() - 30000),
-    },
-    // AI Agent welcome message
-    {
       id: "welcome",
       text: "Hello! I'm your AI Secretary. I can help you manage tasks, delegate work to specialized agents, and coordinate your AI workforce. What would you like to accomplish today?",
       sender: "agent",
       agentName: "Executive Secretary",
-      timestamp: new Date(Date.now() - 10000),
+      timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState("");
@@ -204,24 +141,17 @@ export default function FloatingChatInterface({
       <div className="flex items-center justify-between p-4 border-b border-border bg-muted rounded-t-xl">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10 bg-blue-500 flex items-center justify-center text-white font-medium">
-            MF
+            AI
           </Avatar>
           <div>
-            <h3 className="font-medium text-card-foreground">Mary Franci</h3>
-            <div className="flex items-center gap-2">
-              <Phone className="w-3 h-3 text-gray-400" />
-              <span className="text-sm text-gray-500">+ (1) 234-543-4321</span>
-            </div>
+            <h3 className="font-medium text-card-foreground">
+              Agentic Assistants
+            </h3>
+            <span className="text-sm text-gray-500">Online</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm">
-            <Phone className="w-4 h-4" />
-          </Button>
-          <Button variant="ghost" size="sm">
-            <Video className="w-4 h-4" />
-          </Button>
           <Button variant="ghost" size="sm">
             <Info className="w-4 h-4" />
           </Button>

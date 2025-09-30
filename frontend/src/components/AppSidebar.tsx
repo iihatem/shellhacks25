@@ -40,10 +40,10 @@ export default function AppSidebar({
       {/* Header */}
       <div className="p-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <Play className="w-4 h-4 text-white" />
+          <div className="w-10 h-10 flex items-center justify-center">
+            <img src="/logo.svg" alt="Panoptes Logo" className="w-12 h-12" />
           </div>
-          <h1 className="text-xl font-bold text-card-foreground">Coursue</h1>
+          <h1 className="text-xl font-bold text-card-foreground">Panoptes</h1>
         </div>
       </div>
 
@@ -76,7 +76,7 @@ export default function AppSidebar({
         {/* Friends Section */}
         <div className="mb-8">
           <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">
-            FRIENDS
+            Collaborators
           </h3>
           <div className="space-y-2">
             {friends.map((friend) => (

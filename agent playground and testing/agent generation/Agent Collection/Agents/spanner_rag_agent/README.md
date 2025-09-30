@@ -1,6 +1,6 @@
 # Spanner Tools RAG Agent Sample
 
-## 🚀 Introduction
+## Introduction
 
 This sample demonstrates how to build an intelligent Retrieval Augmented
 Generation (RAG) agent using the flexible, built-in Spanner tools available
@@ -26,6 +26,7 @@ To run this sample, you need an accessible Spanner instance and database in your
 Google Cloud Project.
 
 ### Set up the Spanner database table
+
 To set up the schema, navigate to Spanner Studio:
 First, you want to add the products table. Copy and paste this statement in the
 empty tab.
@@ -50,6 +51,7 @@ Then, click the `run` button and wait a few seconds for your schema to be
 created.
 
 ### Create an Embedding model
+
 Next, you will create an Embedding model in Spanner and configure it to VertexAI
 model endpoint.
 
@@ -69,6 +71,7 @@ created.
 Learn more about Spanner `MODEL` in [Spanner Vertex AI integration](https://cloud.google.com/spanner/docs/ml-tutorial-embeddings)
 
 ### Load the sample data
+
 Now, you will want to insert some products into your database. Open up a new tab
 in Spanner Studio, then copy and paste the following insert statements:
 
@@ -89,6 +92,7 @@ VALUES (1, 1, "Cymbal Helios Helmet", "Safety meets style with the Cymbal childr
 Click the `run` button to insert the data.
 
 ### Generate embeddings for the sample data
+
 For similarity search to work on the products, you need to generate embeddings
 for the product descriptions.
 With the `EmbeddingsModel` created in the schema, this is a simple UPDATE DML
@@ -116,8 +120,8 @@ or
 for the LLM service for your agent. For example, for using Google AI Studio you
 would set:
 
-* GOOGLE_GENAI_USE_VERTEXAI=FALSE
-* GOOGLE_API_KEY={your api key}
+- GOOGLE_GENAI_USE_VERTEXAI=FALSE
+- GOOGLE_API_KEY={your api key}
 
 ### With Application Default Credentials
 
@@ -125,7 +129,7 @@ This mode is useful for quick development when the agent builder is the only
 user interacting with the agent. The tools are run with these credentials.
 
 1. Create application default credentials on the machine where the agent would
-be running by following https://cloud.google.com/docs/authentication/provide-credentials-adc.
+   be running by following https://cloud.google.com/docs/authentication/provide-credentials-adc.
 
 1. Set `CREDENTIALS_TYPE=None` in `agent.py`
 
@@ -148,40 +152,40 @@ credentials.
 ### With Interactive OAuth
 
 1. Follow
-https://developers.google.com/identity/protocols/oauth2#1.-obtain-oauth-2.0-credentials-from-the-dynamic_data.setvar.console_name.
-to get your client id and client secret. Be sure to choose "web" as your client
-type.
+   https://developers.google.com/identity/protocols/oauth2#1.-obtain-oauth-2.0-credentials-from-the-dynamic_data.setvar.console_name.
+   to get your client id and client secret. Be sure to choose "web" as your client
+   type.
 
-1.  Follow
-    https://developers.google.com/workspace/guides/configure-oauth-consent
-    to add scope "https://www.googleapis.com/auth/spanner.data" and
-    "https://www.googleapis.com/auth/spanner.admin" as declaration, this is used
-    for review purpose.
+1. Follow
+   https://developers.google.com/workspace/guides/configure-oauth-consent
+   to add scope "https://www.googleapis.com/auth/spanner.data" and
+   "https://www.googleapis.com/auth/spanner.admin" as declaration, this is used
+   for review purpose.
 
-1.  Follow
-    https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred
-    to add http://localhost/dev-ui/ to "Authorized redirect URIs".
+1. Follow
+   https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred
+   to add http://localhost/dev-ui/ to "Authorized redirect URIs".
 
-    Note: localhost here is just a hostname that you use to access the dev ui,
-    replace it with the actual hostname you use to access the dev ui.
+   Note: localhost here is just a hostname that you use to access the dev ui,
+   replace it with the actual hostname you use to access the dev ui.
 
-1.  For 1st run, allow popup for localhost in Chrome.
+1. For 1st run, allow popup for localhost in Chrome.
 
-1.  Configure your `.env` file to add two more variables before running the
-    agent:
+1. Configure your `.env` file to add two more variables before running the
+   agent:
 
-    *   OAUTH_CLIENT_ID={your client id}
-    *   OAUTH_CLIENT_SECRET={your client secret}
+   - OAUTH_CLIENT_ID={your client id}
+   - OAUTH_CLIENT_SECRET={your client secret}
 
-    Note: don't create a separate .env, instead put it to the same .env file
-    that stores your Vertex AI or Dev ML credentials
+   Note: don't create a separate .env, instead put it to the same .env file
+   that stores your Vertex AI or Dev ML credentials
 
-1.  Set `CREDENTIALS_TYPE=AuthCredentialTypes.OAUTH2` in `agent.py` and run the
-    agent
+1. Set `CREDENTIALS_TYPE=AuthCredentialTypes.OAUTH2` in `agent.py` and run the
+   agent
 
 ## 💬 Sample prompts
 
-* I'd like to buy a starter bike for my 3 year old child, can you show me the recommendation?
+- I'd like to buy a starter bike for my 3 year old child, can you show me the recommendation?
 
 ![Spanner RAG Sample Agent](Spanner_RAG_Sample_Agent.png)
 
@@ -223,4 +227,3 @@ implementation details):
        spanner_tool_settings=SpannerToolSettings(),
      )
      ```
-

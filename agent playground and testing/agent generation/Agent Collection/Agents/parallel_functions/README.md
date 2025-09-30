@@ -21,43 +21,55 @@ This agent demonstrates parallel function calling functionality in ADK. It inclu
 ## Testing Parallel Function Calling
 
 ### Basic Parallel Test
+
 ```
 Get the weather for New York, London, and Tokyo
 ```
+
 Expected: 3 parallel get_weather calls (~2 seconds total instead of ~6 seconds sequential)
 
 ### Mixed Function Types Test
+
 ```
 Get the weather in Paris, the USD to EUR exchange rate, and the distance between New York and London
 ```
+
 Expected: 3 parallel async calls with different functions (~2 seconds total)
 
 ### Complex Parallel Test
+
 ```
 Compare New York and London by getting weather, population, and distance between them
 ```
+
 Expected: Multiple parallel calls combining different data types
 
 ### Performance Comparison Test
+
 You can test the timing difference by asking for the same information in different ways:
 
 **Sequential-style request:**
+
 ```
 First get the weather in New York, then get the weather in London, then get the weather in Tokyo
 ```
-*Expected time: ~6 seconds (2s + 2s + 2s)*
+
+_Expected time: ~6 seconds (2s + 2s + 2s)_
 
 **Parallel-style request:**
+
 ```
 Get the weather in New York, London, and Tokyo
 ```
-*Expected time: ~2 seconds (max of parallel 2s delays)*
+
+_Expected time: ~2 seconds (max of parallel 2s delays)_
 
 The parallel version should be **3x faster** due to concurrent execution.
 
 ## Thread Safety Testing
 
 All tools modify the agent's state (`tool_context.state`) with request logs including timestamps. This helps verify that:
+
 - Multiple tools can safely modify state concurrently
 - No race conditions occur during parallel execution
 - State modifications are preserved correctly
@@ -74,11 +86,11 @@ adk web
 
 ## Example Queries
 
-- "Get weather for New York, London, Tokyo, and Paris" *(4 parallel calls, ~2s total)*
-- "What's the USD to EUR rate and GBP to USD rate?" *(2 parallel calls, ~1.5s total)*
-- "Compare New York and San Francisco: weather, population, and distance" *(3 parallel calls, ~2s total)*
-- "Get population data for Tokyo, London, Paris, and Sydney" *(1 call with 4 cities, ~2s total)*
-- "What's the weather in Paris and the distance from Paris to London?" *(2 parallel calls, ~2s total)*
+- "Get weather for New York, London, Tokyo, and Paris" _(4 parallel calls, ~2s total)_
+- "What's the USD to EUR rate and GBP to USD rate?" _(2 parallel calls, ~1.5s total)_
+- "Compare New York and San Francisco: weather, population, and distance" _(3 parallel calls, ~2s total)_
+- "Get population data for Tokyo, London, Paris, and Sydney" _(1 call with 4 cities, ~2s total)_
+- "What's the weather in Paris and the distance from Paris to London?" _(2 parallel calls, ~2s total)_
 
 ## Common Issues and Solutions
 
@@ -87,17 +99,19 @@ adk web
 **Root Cause**: Using blocking operations like `time.sleep()` in function implementations.
 
 **Solution**: Always use async patterns:
+
 ```python
 # ❌ Wrong - blocks the GIL, forces sequential execution
 def my_tool():
     time.sleep(2)  # Blocks entire event loop
 
-# ✅ Correct - allows true parallelism
+#  Correct - allows true parallelism
 async def my_tool():
     await asyncio.sleep(2)  # Non-blocking, parallel-friendly
 ```
 
-### ✅ Verification: Check execution timing
+### Verification: Check execution timing
+
 - Parallel execution: ~2 seconds for 3 weather calls
 - Sequential execution: ~6 seconds for 3 weather calls
 - If you see 6+ seconds, your functions are blocking the GIL

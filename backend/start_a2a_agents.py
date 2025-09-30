@@ -39,6 +39,7 @@ from adk_agents.hiring_manager.agent import root_agent as hiring_manager_base_ag
 from adk_agents.data_analyst.agent import root_agent as data_analyst_base_agent
 from adk_agents.researcher.agent import root_agent as researcher_base_agent
 from adk_agents.content_creator.agent import root_agent as content_creator_base_agent
+from adk_agents.adk_agent_builder_assistant.agent import root_agent as agent_builder_base_agent
 
 # Configure logging
 logging.basicConfig(
@@ -75,8 +76,8 @@ class A2AAgentManager:
             logger.error("Get your API key from: https://aistudio.google.com/apikey")
             return False
             
-        logger.info("✅ Environment variables configured")
-        logger.info(f"GOOGLE_API_KEY: {'✅ Set' if google_api_key else '❌ Missing'}")
+        logger.info(" Environment variables configured")
+        logger.info(f"GOOGLE_API_KEY: {' Set' if google_api_key else '❌ Missing'}")
         return True
     
     def create_agents(self):
@@ -89,9 +90,10 @@ class A2AAgentManager:
                 'data_analyst': data_analyst_base_agent,
                 'researcher': researcher_base_agent,
                 'content_creator': content_creator_base_agent,
+                'agent_builder': agent_builder_base_agent,
             }
             
-            logger.info("✅ Platform agents loaded successfully")
+            logger.info(" Platform agents loaded successfully")
             return True
         except Exception as e:
             logger.error(f"❌ Failed to load agents: {e}")
@@ -216,9 +218,32 @@ class A2AAgentManager:
                         )
                     ],
                 ),
+                'agent_builder': AgentCard(
+                    name='Agent Builder Assistant',
+                    url='http://localhost:10026',
+                    description='Intelligent assistant for building ADK multi-agent systems using YAML configurations',
+                    version='1.0',
+                    capabilities=AgentCapabilities(streaming=True),
+                    default_input_modes=['text/plain'],
+                    default_output_modes=['text/plain'],
+                    preferred_transport=TransportProtocol.jsonrpc,
+                    skills=[
+                        AgentSkill(
+                            id='build_agents',
+                            name='Build Agent Systems',
+                            description='Creates and configures ADK multi-agent systems with YAML configurations',
+                            tags=['agent building', 'system design', 'yaml configuration', 'multi-agent', 'architecture'],
+                            examples=[
+                                'Help me build a multi-agent system for customer support',
+                                'Create a YAML configuration for a data processing pipeline',
+                                'Design an agent architecture for content management',
+                            ],
+                        )
+                    ],
+                ),
             }
             
-            logger.info("✅ Agent cards created successfully")
+            logger.info(" Agent cards created successfully")
             return True
         except Exception as e:
             logger.error(f"❌ Failed to create agent cards: {e}")
@@ -249,7 +274,7 @@ class A2AAgentManager:
     async def run_agent_server(self, agent_name: str, agent, agent_card, port: int):
         """Run a single agent server."""
         try:
-            logger.info(f"🚀 Starting {agent_name} agent on port {port}")
+            logger.info(f" Starting {agent_name} agent on port {port}")
             
             app = self.create_agent_a2a_server(agent, agent_card)
             
@@ -277,6 +302,7 @@ class A2AAgentManager:
                 ('data_analyst', 10022),
                 ('researcher', 10023),
                 ('content_creator', 10024),
+                ('agent_builder', 10026),
             ]
             
             # Create tasks for all agents
@@ -296,14 +322,15 @@ class A2AAgentManager:
             # Give servers time to start
             await asyncio.sleep(3)
             
-            logger.info("✅ All A2A agent servers started!")
+            logger.info(" All A2A agent servers started!")
             logger.info("   - Secretary Agent: http://127.0.0.1:10020")
             logger.info("   - Hiring Manager Agent: http://127.0.0.1:10021")
             logger.info("   - Data Analyst Agent: http://127.0.0.1:10022")
             logger.info("   - Researcher Agent: http://127.0.0.1:10023")
             logger.info("   - Content Creator Agent: http://127.0.0.1:10024")
+            logger.info("   - Agent Builder Assistant: http://127.0.0.1:10026")
             logger.info("")
-            logger.info("🎯 Agents are now listening for frontend requests!")
+            logger.info(" Agents are now listening for frontend requests!")
             logger.info("💡 Use Ctrl+C to stop all servers")
             
             # Keep servers running indefinitely
@@ -311,7 +338,7 @@ class A2AAgentManager:
             try:
                 await asyncio.gather(*tasks)
             except KeyboardInterrupt:
-                logger.info("🛑 Shutting down servers...")
+                logger.info(" Shutting down servers...")
                 self.running = False
                 
         except Exception as e:
@@ -331,7 +358,7 @@ class A2AAgentManager:
     
     def start(self):
         """Start the A2A agent manager."""
-        logger.info("🚀 Starting A2A Agent Manager...")
+        logger.info(" Starting A2A Agent Manager...")
         
         # Setup environment
         if not self.setup_environment():
@@ -353,7 +380,7 @@ class A2AAgentManager:
         time.sleep(5)
         
         if self.running:
-            logger.info("✅ A2A Agent Manager started successfully!")
+            logger.info(" A2A Agent Manager started successfully!")
             return True
         else:
             logger.error("❌ Failed to start A2A Agent Manager")
@@ -361,15 +388,15 @@ class A2AAgentManager:
     
     def stop(self):
         """Stop the A2A agent manager."""
-        logger.info("🛑 Stopping A2A Agent Manager...")
+        logger.info(" Stopping A2A Agent Manager...")
         self.running = False
         if self.server_thread and self.server_thread.is_alive():
             self.server_thread.join(timeout=5)
-        logger.info("✅ A2A Agent Manager stopped")
+        logger.info(" A2A Agent Manager stopped")
 
 def signal_handler(signum, frame):
     """Handle shutdown signals."""
-    logger.info("🛑 Received shutdown signal...")
+    logger.info(" Received shutdown signal...")
     if 'manager' in globals():
         manager.stop()
     sys.exit(0)

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
+import { services, Agent } from "@/services";
 import AppSidebar from "./AppSidebar";
 import StatisticsCard from "./StatisticsCard";
 import FloatingChatInterface from "./FloatingChatInterface";
@@ -14,7 +15,7 @@ import Dashboard from "./Dashboard";
 import AgentsList from "./AgentsList";
 import TasksList from "./TasksList";
 import SettingsPage from "./SettingsPage";
-import { Search, Mail, Bell, Play } from "lucide-react";
+import { Search, Mail, Bell, Play, RefreshCw } from "lucide-react";
 
 export default function AppLayout() {
   const { user, userProfile, logout } = useAuth();
@@ -146,10 +147,117 @@ function DashboardContent() {
 
 // Agents Content Component
 function AgentsContent() {
+  const { user } = useAuth();
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAgents();
+  }, [user]);
+
+  const getA2AAgents = (): Agent[] => {
+    return [
+      {
+        id: "a2a-secretary",
+        name: "Executive Secretary",
+        role: "secretary",
+        capabilities: [
+          "coordination",
+          "task_delegation",
+          "workflow_management",
+        ],
+        is_active: true,
+      },
+      {
+        id: "a2a-hiring-manager",
+        name: "Hiring Manager",
+        role: "hiring_manager",
+        capabilities: [
+          "agent_creation",
+          "workforce_management",
+          "specialization",
+        ],
+        is_active: true,
+      },
+      {
+        id: "a2a-data-analyst",
+        name: "Data Analyst",
+        role: "data_analyst",
+        capabilities: ["data_analysis", "statistics", "insights", "reporting"],
+        is_active: true,
+      },
+      {
+        id: "a2a-researcher",
+        name: "Researcher",
+        role: "researcher",
+        capabilities: ["research", "fact_checking", "information_synthesis"],
+        is_active: true,
+      },
+      {
+        id: "a2a-content-creator",
+        name: "Content Creator",
+        role: "content_creator",
+        capabilities: [
+          "content_creation",
+          "writing",
+          "marketing",
+          "creative_communications",
+        ],
+        is_active: true,
+      },
+      {
+        id: "a2a-agent-builder",
+        name: "Agent Builder Assistant",
+        role: "agent_builder",
+        capabilities: [
+          "agent_building",
+          "system_design",
+          "yaml_configuration",
+          "multi_agent_architecture",
+        ],
+        is_active: true,
+      },
+    ];
+  };
+
+  const fetchAgents = async () => {
+    try {
+      setLoading(true);
+      const response = await services.agents.getAgents(user?.uid);
+      const userAgents = response.data || [];
+      const a2aAgents = getA2AAgents();
+
+      // Combine user agents with A2A agents
+      setAgents([...a2aAgents, ...userAgents]);
+
+      if (response.error) {
+        console.error("Error fetching user agents:", response.error);
+      }
+    } catch (error) {
+      console.error("Error fetching agents:", error);
+      // Still show A2A agents even if user agents fail to load
+      setAgents(getA2AAgents());
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">AI Agents</h1>
-      <AgentsList agents={[]} loading={false} />
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-card-foreground">AI Agents</h1>
+          <p className="text-muted-foreground mt-1">
+            Manage your specialized AI workforce • {agents.length} agents
+            available
+          </p>
+        </div>
+        <Button onClick={fetchAgents} variant="outline" size="sm">
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Refresh
+        </Button>
+      </div>
+      <AgentsList agents={agents} loading={loading} />
     </div>
   );
 }

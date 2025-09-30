@@ -28,28 +28,28 @@ async def test_startup_components():
         from secretary_agent import SecretaryAgent
         from hiring_manager import HiringManagerExecutor
         from agents import EMPLOYEE_AGENTS, EmployeeAgentExecutor
-        print("   ✅ All imports successful")
+        print("    All imports successful")
         
         # Test agent creation
         print("2. Testing agent creation...")
         for agent_type, agent_info in EMPLOYEE_AGENTS.items():
             agent = agent_info['agent']
-            print(f"   ✅ {agent_type}: {agent.name}")
+            print(f"    {agent_type}: {agent.name}")
         
         # Test platform initialization
         print("3. Testing platform initialization...")
         platform = AgentPlatform()
-        print("   ✅ Platform initialized")
+        print("    Platform initialized")
         
         # Test secretary initialization
         print("4. Testing secretary initialization...")
         secretary = SecretaryAgent()
-        print("   ✅ Secretary initialized")
+        print("    Secretary initialized")
         
         # Test hiring manager initialization
         print("5. Testing hiring manager initialization...")
         hiring_manager = HiringManagerExecutor()
-        print("   ✅ Hiring manager initialized")
+        print("    Hiring manager initialized")
         
         print("=" * 40)
         print("🎉 All components test passed!")

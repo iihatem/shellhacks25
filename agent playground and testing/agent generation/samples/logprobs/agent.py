@@ -62,7 +62,7 @@ async def append_logprobs_to_response(
 
 [LOG PROBABILITY ANALYSIS]
 📊 Average Log Probability: {llm_response.avg_logprobs:.4f}
-🎯 Confidence Level: {confidence_level}
+ Confidence Level: {confidence_level}
 📈 Confidence Score: {100 * (2 ** llm_response.avg_logprobs):.1f}%"""
 
     # Optionally include detailed logprobs_result information

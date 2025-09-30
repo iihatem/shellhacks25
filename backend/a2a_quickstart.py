@@ -44,6 +44,7 @@ from adk_agents.hiring_manager.agent import root_agent as hiring_manager_base_ag
 from adk_agents.data_analyst.agent import root_agent as data_analyst_base_agent
 from adk_agents.researcher.agent import root_agent as researcher_base_agent
 from adk_agents.content_creator.agent import root_agent as content_creator_base_agent
+from adk_agents.adk_agent_builder_assistant.agent import root_agent as agent_builder_base_agent
 from google.adk.artifacts import InMemoryArtifactService
 from google.adk.memory.in_memory_memory_service import InMemoryMemoryService
 from google.adk.runners import Runner
@@ -162,11 +163,11 @@ async def run_stuff():
         print('\nGet your API key from: https://aistudio.google.com/apikey')
         return
 
-    print('✅ Environment variables configured:')
+    print(' Environment variables configured:')
     print(f'GOOGLE_GENAI_USE_VERTEXAI: {os.environ["GOOGLE_GENAI_USE_VERTEXAI"]}')
     print(f'GOOGLE_CLOUD_PROJECT: {os.environ["GOOGLE_CLOUD_PROJECT"]}')
     print(f'GOOGLE_CLOUD_LOCATION: {os.environ["GOOGLE_CLOUD_LOCATION"]}')
-    print(f'GOOGLE_API_KEY: {"✅ Set" if google_api_key else "❌ Missing"}')
+    print(f'GOOGLE_API_KEY: {" Set" if google_api_key else "❌ Missing"}')
 
 
     # Authenticate your notebook environment (Colab only)
@@ -190,6 +191,7 @@ async def run_stuff():
     data_analyst_agent = data_analyst_base_agent
     researcher_agent = researcher_base_agent
     content_creator_agent = content_creator_base_agent
+    agent_builder_agent = agent_builder_base_agent
 
     print('Platform agents loaded successfully!')
 
@@ -315,6 +317,30 @@ async def run_stuff():
         ],
     )
 
+    agent_builder_agent_card = AgentCard(
+        name='Agent Builder Assistant',
+        url='http://localhost:10026',
+        description='Intelligent assistant for building ADK multi-agent systems using YAML configurations',
+        version='1.0',
+        capabilities=AgentCapabilities(streaming=True),
+        default_input_modes=['text/plain'],
+        default_output_modes=['text/plain'],
+        preferred_transport=TransportProtocol.jsonrpc,
+        skills=[
+            AgentSkill(
+                id='build_agents',
+                name='Build Agent Systems',
+                description='Creates and configures ADK multi-agent systems with YAML configurations',
+                tags=['agent building', 'system design', 'yaml configuration', 'multi-agent', 'architecture'],
+                examples=[
+                    'Help me build a multi-agent system for customer support',
+                    'Create a YAML configuration for a data processing pipeline',
+                    'Design an agent architecture for content management',
+                ],
+            )
+        ],
+    )
+
 
     # Create Remote A2A Agents for inter-agent communication
     remote_secretary_agent = RemoteA2aAgent(
@@ -347,6 +373,12 @@ async def run_stuff():
         agent_card=f'http://localhost:10024{AGENT_CARD_WELL_KNOWN_PATH}',
     )
 
+    remote_agent_builder_agent = RemoteA2aAgent(
+        name='build_agents',
+        description='Intelligent assistant for building ADK multi-agent systems using YAML configurations',
+        agent_card=f'http://localhost:10026{AGENT_CARD_WELL_KNOWN_PATH}',
+    )
+
 
     # Create the Master Orchestrator Agent
     master_orchestrator_agent = SequentialAgent(
@@ -357,6 +389,7 @@ async def run_stuff():
             remote_data_analyst_agent,
             remote_researcher_agent,
             remote_content_creator_agent,
+            remote_agent_builder_agent,
         ],
     )
 
@@ -460,6 +493,9 @@ async def run_stuff():
                 run_agent_server(content_creator_agent, content_creator_agent_card, 10024)
             ),
             asyncio.create_task(
+                run_agent_server(agent_builder_agent, agent_builder_agent_card, 10026)
+            ),
+            asyncio.create_task(
                 run_agent_server(master_orchestrator_agent, master_orchestrator_agent_card, 10025)
             ),
         ]
@@ -467,7 +503,7 @@ async def run_stuff():
         # Give servers time to start
         await asyncio.sleep(3)
 
-        print('✅ All platform agent servers started!')
+        print(' All platform agent servers started!')
         print('   - Secretary Agent: http://127.0.0.1:10020')
         print('   - Hiring Manager Agent: http://127.0.0.1:10021')
         print('   - Data Analyst Agent: http://127.0.0.1:10022')
@@ -559,7 +595,7 @@ async def run_stuff():
     asyncio.run(test_content_creator_agent())
     asyncio.run(test_master_orchestrator())
 
-    print('✅ All agent tests completed!')
+    print(' All agent tests completed!')
 
 if __name__ == '__main__':
     asyncio.run(run_stuff())

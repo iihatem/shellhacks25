@@ -2,7 +2,7 @@
 
 This guide explains how to start and manage the A2A agents for the AI Agent Management Platform.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: Start Everything (Recommended)
 
@@ -72,7 +72,7 @@ GOOGLE_CLOUD_LOCATION=us-central1
 - **Researcher**: http://127.0.0.1:10023
 - **Content Creator**: http://127.0.0.1:10024
 
-## 🎯 How It Works
+## How It Works
 
 ### 1. Agent Communication
 
@@ -119,7 +119,7 @@ curl -X POST http://localhost:8001/chat \
 curl http://127.0.0.1:10020/.well-known/agent_card
 ```
 
-## 🛑 Stopping the Platform
+## Stopping the Platform
 
 - Press `Ctrl+C` to stop all services gracefully
 - The platform will shut down all agents and servers
@@ -153,7 +153,7 @@ curl http://127.0.0.1:10020/.well-known/agent_card
 
 When everything is working correctly, you should see:
 
-- ✅ All agent servers started messages
-- ✅ Backend server running on port 8001
-- ✅ Agent status endpoint returning all agents as active
-- ✅ Chat endpoint routing messages to correct agents
+- All agent servers started messages
+- Backend server running on port 8001
+- Agent status endpoint returning all agents as active
+- Chat endpoint routing messages to correct agents

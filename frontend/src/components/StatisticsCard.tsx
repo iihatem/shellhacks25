@@ -96,29 +96,31 @@ export default function StatisticsCard({}: StatisticsCardProps) {
       case "pending":
         return <AlertCircle className="w-4 h-4 text-yellow-500" />;
       default:
-        return <Clock className="w-4 h-4 text-gray-400" />;
+        return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-700";
+        return "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400";
       case "medium":
-        return "bg-yellow-100 text-yellow-700";
+        return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400";
       case "low":
-        return "bg-green-100 text-green-700";
+        return "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-muted text-muted-foreground";
     }
   };
 
   return (
-    <div className="w-80 bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col h-fit max-h-[calc(100vh-8rem)] overflow-y-auto my-4 mr-4">
+    <div className="w-80 bg-card rounded-xl shadow-lg border border-border flex flex-col h-fit max-h-[calc(100vh-8rem)] overflow-y-auto my-4 mr-4">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Statistic</h2>
+          <h2 className="text-lg font-semibold text-card-foreground">
+            Overview
+          </h2>
           <Button variant="ghost" size="sm">
             <MoreHorizontal className="w-4 h-4" />
           </Button>
@@ -143,10 +145,10 @@ export default function StatisticsCard({}: StatisticsCardProps) {
           </div>
 
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+            <h3 className="text-lg font-semibold text-card-foreground mb-1">
               Good Morning {getUserName()} 👋
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Manage your AI agents and delegate tasks efficiently!
             </p>
           </div>
@@ -154,9 +156,9 @@ export default function StatisticsCard({}: StatisticsCardProps) {
       </div>
 
       {/* Tasks Section */}
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900">Your Tasks</h3>
+          <h3 className="font-semibold text-card-foreground">Your Tasks</h3>
           <Button variant="ghost" size="sm">
             <Plus className="w-4 h-4" />
           </Button>
@@ -166,11 +168,11 @@ export default function StatisticsCard({}: StatisticsCardProps) {
           {tasks.slice(0, 4).map((task) => (
             <div
               key={task.id}
-              className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+              className="flex items-center gap-3 p-3 bg-muted rounded-lg"
             >
               {getStatusIcon(task.status)}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-card-foreground truncate">
                   {task.title}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
@@ -181,7 +183,7 @@ export default function StatisticsCard({}: StatisticsCardProps) {
                   >
                     {task.priority}
                   </Badge>
-                  <span className="text-xs text-gray-500 capitalize">
+                  <span className="text-xs text-muted-foreground capitalize">
                     {task.status.replace("_", " ")}
                   </span>
                 </div>
@@ -194,7 +196,7 @@ export default function StatisticsCard({}: StatisticsCardProps) {
       {/* Agents Section */}
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900">Your Agents</h3>
+          <h3 className="font-semibold text-card-foreground">Your Agents</h3>
           <Button variant="ghost" size="sm">
             <Plus className="w-4 h-4" />
           </Button>
@@ -204,24 +206,28 @@ export default function StatisticsCard({}: StatisticsCardProps) {
           {agents.map((agent) => (
             <div
               key={agent.id}
-              className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+              className="flex items-center gap-3 p-3 bg-muted rounded-lg"
             >
               <div className="relative">
                 <Avatar className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 text-white text-sm font-medium">
                   {agent.avatar}
                 </Avatar>
                 <div
-                  className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                    agent.status === "online" ? "bg-green-500" : "bg-gray-400"
+                  className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background ${
+                    agent.status === "online"
+                      ? "bg-green-500"
+                      : "bg-muted-foreground"
                   }`}
                 ></div>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-card-foreground truncate">
                   {agent.name}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs text-gray-500">{agent.role}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {agent.role}
+                  </span>
                 </div>
               </div>
             </div>

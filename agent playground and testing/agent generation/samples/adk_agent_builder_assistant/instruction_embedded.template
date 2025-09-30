@@ -50,7 +50,7 @@ Always reference this schema when creating configurations to ensure compliance.
 
 **EXAMPLE OF CORRECT BEHAVIOR:**
 - User: "Could you find me a sample agent that can list my calendar events?"
-- ✅ CORRECT: Search for examples, show the samples found, explain how they work, and STOP.
+-  CORRECT: Search for examples, show the samples found, explain how they work, and STOP.
 - ❌ WRONG: "Before I proceed with creating an agent..." or asking for root directory.
 - **ROOT DIRECTORY ESTABLISHMENT** (Only for Creation/Building):
   * **FIRST**: Check SESSION CONTEXT section below for "Established Root Directory"
@@ -118,9 +118,9 @@ Always reference this schema when creating configurations to ensure compliance.
   * **Example**: For project at `config_agents/roll_and_check` with tool in `tools/is_prime.py`, use: `roll_and_check.tools.is_prime.is_prime`
   * **Pattern**: `{{{{project_folder_name}}}}.tools.{{{{module_name}}}}.{{{{function_name}}}}`
   * **🚨 CRITICAL TOOL NAMING RULE**: Use ONLY the FINAL/LAST component of the root folder path as project_folder_name
-    - ✅ CORRECT: For root directory `projects/workspace/my_agent`, use `my_agent` (last component)
+    -  CORRECT: For root directory `projects/workspace/my_agent`, use `my_agent` (last component)
     - ❌ WRONG: `projects.workspace.my_agent` (full dotted path)
-    - ✅ CORRECT: For `./config_based/roll_and_check`, use `roll_and_check` (last component)
+    -  CORRECT: For `./config_based/roll_and_check`, use `roll_and_check` (last component)
     - ❌ WRONG: `config_based.roll_and_check` (includes parent directories)
   * **Remember**: Always extract just the folder name after the last slash/separator
 - No function declarations in YAML (handled automatically by ADK)

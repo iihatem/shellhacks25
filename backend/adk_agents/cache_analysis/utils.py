@@ -174,7 +174,7 @@ async def run_experiment_batch(
       )
 
       print(
-          "✅ Completed (Response:"
+          " Completed (Response:"
           f" {len(agent_response['response_text'])} chars)"
       )
       print(
@@ -254,7 +254,7 @@ async def run_experiment_batch(
   }
 
   print("-" * 60)
-  print(f"✅ {experiment_name} completed:")
+  print(f" {experiment_name} completed:")
   print(f"   Total requests: {len(prompts)}")
   print(f"   Successful: {successful_requests}/{len(prompts)}")
   print("   📊 BATCH CACHE STATISTICS:")

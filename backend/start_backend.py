@@ -24,7 +24,7 @@ def start_backend_server():
         import uvicorn
         from main import app
         
-        logger.info("🚀 Starting FastAPI backend server...")
+        logger.info(" Starting FastAPI backend server...")
         uvicorn.run(app, host="0.0.0.0", port=8001, log_level="info")
         
     except Exception as e:
@@ -36,7 +36,7 @@ def main():
     # Load environment variables
     load_dotenv()
     
-    logger.info("🎯 Starting AI Agent Management Platform Backend")
+    logger.info(" Starting AI Agent Management Platform Backend")
     logger.info("📡 Backend will be available at: http://localhost:8001")
     logger.info("📋 API Documentation: http://localhost:8001/docs")
     logger.info("🤖 Agent Status: http://localhost:8001/agents/status")

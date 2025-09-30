@@ -55,7 +55,7 @@ async def assert_session_values(
   )
   for key in keys_in_ctx_session or []:
     assert key in session_in_ctx.state
-  print('\033[92mpass ✅\033[0m')
+  print('\033[92mpass \033[0m')
 
   print(
       '** Asserting keys are already persisted in session:'
@@ -64,7 +64,7 @@ async def assert_session_values(
   )
   for key in keys_in_service_session or []:
     assert key in session_in_service.state
-  print('\033[92mpass ✅\033[0m')
+  print('\033[92mpass \033[0m')
 
   print(
       '** Asserting keys are not persisted in session yet:'
@@ -73,7 +73,7 @@ async def assert_session_values(
   )
   for key in keys_not_in_service_session or []:
     assert key not in session_in_service.state
-  print('\033[92mpass ✅\033[0m')
+  print('\033[92mpass \033[0m')
   print('============================================================')
 
 

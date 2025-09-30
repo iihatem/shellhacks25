@@ -270,7 +270,7 @@ class AgentPlatform:
     async def start_platform(self):
         """Start the entire platform."""
         try:
-            logger.info("🚀 Starting A2A Agent Management Platform...")
+            logger.info(" Starting A2A Agent Management Platform...")
             
             # Validate configuration
             validate_config()
